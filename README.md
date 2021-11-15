@@ -44,12 +44,13 @@ MySQL/MariaDB
 
 NodeJS
 
-
-- Clonar projeto e acessar pasta
+- Clonar projeto, acessar pasta e abrir VS Code na pasta
 ```
 git clone https://github.com/renandmc/web-ped.git
 
 cd web-ped
+
+code .
 ```
 - Instalar dependências do projeto
 ```
@@ -64,6 +65,10 @@ cp .env.example .env
 - Criar tabelas do banco (migrations)
 ```
 php artisan migrate
+```
+- Criar chave do aplicativo (Utilizada para funções internas de segurança)
+```
+php artisan key:generate
 ```
 - Rodar projeto
 ```
