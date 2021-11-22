@@ -41,4 +41,19 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function adminlte_image()
+    {
+        return 'https://i.pravatar.cc/100?u=' . $this->email;
+    }
+
+    public function adminlte_desc()
+    {
+        return $this->email;
+    }
+
+    public function adminlte_profile_url()
+    {
+        return '#';
+    }
 }
