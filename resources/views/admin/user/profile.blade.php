@@ -19,13 +19,36 @@
 @section('content')
     <x-adminlte-card>
         <div class="row">
-            <div class="col-md-3">
-                <img src="" alt="">
+            <div class="col-md-3 text-center my-auto">
+                <img src="https://i.pravatar.cc/200?u={{ Auth::user()->email }}" alt="Foto perfil {{ Auth::user()->name }}" class="img-circle elevation-2">
             </div>
             <div class="col-md-9">
-                <h2 class="card-title">{{ Auth::user()->name }}</h2>
-                <p class="card-text">{{ Auth::user()->email }}</p>
-                <p class="card-text">{{ Auth::user()->created_at }}</p>
+                <div class="row">
+                    <div class="col-8">
+                        <h2>{{ Auth::user()->name }}</h2>
+                        <p class="text-muted">Cadastrado em {{ Auth::user()->created_at->isoFormat('L') }}</p>
+                        <p>
+                            <a href="mailto:{{ Auth::user()->email }}">{{ Auth::user()->email }}</a>
+                        </p>
+                        <hr>
+                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo, error fuga ipsam nisi dignissimos a ex laudantium necessitatibus aut odio quod doloribus reiciendis cupiditate quaerat soluta deleniti consequatur temporibus porro?</p>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas ipsam suscipit obcaecati enim dolorum similique exercitationem. Odio quo accusamus impedit odit dignissimos tempora nam fugiat quae, quasi quas quos pariatur.</p>
+                    </div>
+                    <div class="col-4 my-auto">
+                        <a href="#" class="btn btn-block btn-default">
+                            <i class="fa fa-edit"></i>
+                            Alterar dados
+                        </a>
+                        <a href="#" class="btn btn-block btn-default">
+                            <i class="fa fa-key"></i>
+                            Alterar senha
+                        </a>
+                        <a href="#" class="btn btn-block btn-default">
+                            <i class="fa fa-envelope"></i>
+                            Alterar e-mail
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </x-adminlte-card>
