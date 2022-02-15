@@ -45,12 +45,12 @@
                         <p class="lead text-center">Para clientes e vendedores que procuram por agilidade, facilidade e redução de custos na tiragem de pedidos...</p>
                     </div>
                     <div class="col-4">
-                        <img src="https://pixabay.com/get/g94066559fb006b06ecfc1b6c80bbd1d5de642083bd3bee82b54bb1c44340b582e3ee14cf768a99c1c85dd353e08ab1b1b59ed1abdad60ae634e4d0385a64a59381450bf446342ee16a52345cd837e306_1920.jpg" alt="" class="w-100 rounded">
+                        <img src="{{ asset('img/estoque.jpg') }}" alt="" class="w-100 rounded">
                     </div>
                 </div>
                 <div class="row align-items-center">
                     <div class="col-4">
-                        <img src="https://pixabay.com/get/g277b6556a0789c3a14c1a380118dc392f5b05ed4d977224175615ac927a5a9fdd6dfef118f936db1ea5b5c129654812a8d029d62441858ef44a1d8022cfdb23fb67b3113fa011a2353c13c8f49c713af_1920.jpg" alt="" class="w-100 rounded">
+                        <img src="{{ asset('img/pedido.jpg') }}" alt="" class="w-100 rounded">
                     </div>
                     <div class="col-8">
                         <p class="lead">O WEB PED oferece um site com o catálogo dos produtos disponíveis dos vendedores, que simplifica a comercialização dos produtos para seus clientes, o contrário de outros vendedores, que só realizam tiragem de pedidos pessoalmente, oferecemos um site com a possibilidade da tiragem online.</p>
