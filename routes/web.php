@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\User\ProfileController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -24,4 +24,14 @@ Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::get('/admin/user/profile', [ProfileController::class, 'index'])->name('profile');
+Route::prefix('admin')->group(function () {
+    Route::prefix('user')->group(function () {
+        Route::get('profile', [ProfileController::class, 'index'])->name('admin.user.profile');
+        Route::get('edit-profile', [ProfileController::class, 'editProfile'])->name('admin.user.edit-profile');
+        Route::put('update-profile', [ProfileController::class, 'updateProfile'])->name('admin.user.update-profile');
+        Route::get('edit-password', [ProfileController::class, 'editPassword'])->name('admin.user.edit-password');
+        Route::put('update-password', [ProfileController::class, 'updatePassword'])->name('admin.user.update-password');
+    });
+});
+
+

@@ -64,12 +64,12 @@ return [
     |
     */
 
-    'usermenu_enabled' => true,
-    'usermenu_header' => true,
-    'usermenu_header_class' => 'bg-gradient-secondary',
-    'usermenu_image' => true,
-    'usermenu_desc' => true,
-    'usermenu_profile_url' => true,
+    'usermenu_enabled' => false,
+    'usermenu_header' => false,
+    'usermenu_header_class' => '',
+    'usermenu_image' => false,
+    'usermenu_desc' => false,
+    'usermenu_profile_url' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -227,25 +227,14 @@ return [
     'menu' => [
         // Navbar items:
         [
-            'type'         => 'navbar-search',
-            'text'         => 'search',
-            'topnav_right' => true,
-        ],
-        [
             'type'         => 'fullscreen-widget',
             'topnav_right' => true,
         ],
         // Sidebar items:
-        /*
-        [
-            'type' => 'sidebar-menu-search',
-            'text' => 'search',
-        ],
-        */
         [
             'text' => 'dashboard',
             'route' => 'home',
-            'icon' => 'fas fa-fw fa-tachometer-alt',
+            'icon' => 'fas fa-fw fa-chart-line',
             'active' => ['home']
         ],
         ['header' => 'records'],
@@ -254,33 +243,13 @@ return [
             'url' => '#',
             'icon' => 'fas fa-fw fa-boxes',
         ],
-        ['header' => 'account_settings'],
+        ['header' => 'Configurações'],
         [
             'text' => 'profile',
             'url'  => 'admin/user/profile',
+            'active' => ['admin/user*'],
             'icon' => 'fas fa-fw fa-user',
-        ],
-        [
-            'text' => 'change_password',
-            'url'  => '#',
-            'icon' => 'fas fa-fw fa-lock',
-        ],
-        ['header' => 'labels'],
-        [
-            'text'       => 'important',
-            'icon_color' => 'red',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'warning',
-            'icon_color' => 'yellow',
-            'url'        => '#',
-        ],
-        [
-            'text'       => 'information',
-            'icon_color' => 'cyan',
-            'url'        => '#',
-        ],
+        ]
     ],
 
     /*
