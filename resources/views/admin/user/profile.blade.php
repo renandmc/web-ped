@@ -17,7 +17,14 @@
     <x-adminlte-card>
         <div class="row">
             <div class="col-12 col-md-3 my-md-auto text-center">
-                <img src="{{ $user->adminlte_image() }}" alt="Foto perfil {{ $user->name }}" class="img-circle elevation-2 mw-100">
+                <img src="{{ $user->adminlte_image() }}" alt="Foto perfil {{ $user->name }}" class="img-rounded mw-75">
+                <p>
+                    <small class="text-muted">
+                        <a href="https://br.gravatar.com/" target="_blank">gravatar.com</a>
+                        /
+                        <a href="https://ui-avatars.com/" target="_blank">ui-avatars.com</a>
+                    </small>
+                </p>
             </div>
             <div class="col-12 col-md-9">
                 <div class="row">
