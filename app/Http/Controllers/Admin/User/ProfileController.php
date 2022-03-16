@@ -44,15 +44,15 @@ class ProfileController extends Controller
     public function updateProfile(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email,' . Auth::id(),
+            'name'  => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $request->user()->id,
         ]);
-        $user = User::find(Auth::id());
+        $user = User::find($request->user()->id);
         $user->name = $request->name;
         $user->email = $request->email;
         $user->save();
         Auth::setUser($user);
-        return redirect()->route('admin.user.profile');
+        return redirect()->route('user.profile');
     }
 
     /**
@@ -76,13 +76,13 @@ class ProfileController extends Controller
     public function updatePassword(Request $request)
     {
         $request->validate([
-            'current_password' => 'required|current_password',
-            'new_password' => 'required|string|min:6|different:current_password|confirmed',
+            'current_password'  => 'required|current_password',
+            'new_password'      => 'required|string|min:6|different:current_password|confirmed',
         ]);
         $user = User::find(Auth::id());
         $user->password = Hash::make($request->new_password);
         $user->save();
         Auth::setUser($user);
-        return redirect()->route('admin.user.profile');
+        return redirect()->route('user.profile');
     }
 }

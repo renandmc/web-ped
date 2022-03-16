@@ -17,8 +17,9 @@ class CompanyController extends Controller
     public function index()
     {
         $companies = Company::orderBy('active', 'desc')->paginate(6);
+
         return view('admin.company.index', [
-            'companies' => $companies,
+            'companies' => $companies
         ]);
     }
 
@@ -41,10 +42,7 @@ class CompanyController extends Controller
     public function store(StoreCompanyRequest $request)
     {
         $validated = $request->validated();
-
         $validated['owner_id'] = $request->user()->id;
-        $validated['created_by'] = $request->user()->id;
-        $validated['updated_by'] = $request->user()->id;
 
         Company::create($validated);
 
@@ -60,7 +58,7 @@ class CompanyController extends Controller
     public function show(Company $company)
     {
         return view('admin.company.show', [
-            'company' => $company,
+            'company' => $company
         ]);
     }
 
@@ -88,13 +86,7 @@ class CompanyController extends Controller
     {
         $validated = $request->validated();
 
-        $validated['updated_by'] = $request->user()->id;
-
-        $company->name = $validated['name'];
-        $company->corporate_name = $validated['corporate_name'];
-        $company->cnpj = $validated['cnpj'];
-        $company->active = $validated['active'];
-        $company->updated_by = $validated['updated_by'];
+        $company->fill($validated);
 
         $company->save();
 

@@ -32,11 +32,10 @@
                         value="{{ old('cnpj') }}" required />
                 </div>
                 <div class="col-md">
-                    <x-adminlte-input name="name" label="Nome *" class="text-uppercase" maxlength="100"
-                        value="{{ old('name') }}" required />
+                    <x-adminlte-input name="name" label="Nome *" maxlength="100" value="{{ old('name') }}" required />
                 </div>
                 <div class="col-md">
-                    <x-adminlte-input name="corporate_name" label="Razão social *" class="text-uppercase" maxlength="100"
+                    <x-adminlte-input name="corporate_name" label="Razão social *" maxlength="100"
                         value="{{ old('corporate_name') }}" required />
                 </div>
                 <div class="col-auto">
@@ -58,7 +57,6 @@
                 </div>
             </div>
             <div class="float-right">
-                <a href="{{ route('companies.index') }}" class="btn btn-default">Voltar</a>
                 <x-adminlte-button type="submit" theme="primary" label="Salvar" />
             </div>
         </form>

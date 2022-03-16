@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCompaniesTable extends Migration
+class CreateProductsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,20 @@ class CreateCompaniesTable extends Migration
      */
     public function up()
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('corporate_name', 100)->unique();
-            $table->string('cnpj', 14)->unique();
-            $table->string('image_url', 200)->nullable();
+            $table->integer('size');
+            $table->string('measure_unit', 10);
+            $table->decimal('price', 10, 2);
             $table->boolean('active')->default(true);
-            $table->timestamps();
-            $table->foreignId('owner_id')
-                ->constrained('users')
+            $table->string('image_url', 100)->nullable();
+            $table->text('description')->nullable();
+            $table->foreignId('company_id')
+                ->constrained()
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
+            $table->timestamps();
         });
     }
 
@@ -35,6 +37,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('products');
     }
 }

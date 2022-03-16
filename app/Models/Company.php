@@ -22,9 +22,7 @@ class Company extends Model
         'corporate_name',
         'image_url',
         'active',
-        'owner_id',
-        'created_by',
-        'updated_by',
+        'owner_id'
     ];
 
     public function owner()
@@ -32,14 +30,9 @@ class Company extends Model
         return $this->belongsTo(User::class, 'owner_id');
     }
 
-    public function createdBy()
+    public function products()
     {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function updatedBy()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
+        return $this->hasMany(Product::class);
     }
 
     protected function getCnpjAttribute($value)
@@ -52,15 +45,5 @@ class Company extends Model
     protected function getImageUrlAttribute($value)
     {
         return $value ?? URL_PLACEHOLDER;
-    }
-
-    protected function setNameAttribute($value)
-    {
-        $this->attributes['name'] = strtoupper(trim($value));
-    }
-
-    protected function setCorporateNameAttribute($value)
-    {
-        $this->attributes['corporate_name'] = strtoupper(trim($value));
     }
 }
