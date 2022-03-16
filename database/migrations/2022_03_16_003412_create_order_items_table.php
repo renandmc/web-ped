@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCompaniesTable extends Migration
+class CreateOrderItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,18 @@ class CreateCompaniesTable extends Migration
      */
     public function up()
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('order_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('owner_id')
-                ->constrained('users')
+            $table->foreignId('order_id')
+                ->constrained('orders')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->string('name', 100);
-            $table->string('corporate_name', 100)->unique();
-            $table->string('cnpj', 14)->unique();
-            $table->string('image_url', 200)->nullable();
-            $table->boolean('active')->default(true);
+            $table->foreignId('product_id')
+                ->constrained('products')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->integer('quantity');
+            $table->decimal('total_item', 10, 2);
             $table->timestamps();
         });
     }
@@ -35,6 +36,6 @@ class CreateCompaniesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('order_items');
     }
 }
