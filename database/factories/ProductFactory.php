@@ -15,8 +15,7 @@ class ProductFactory extends Factory
     {
         return [
             'name' => ucfirst($this->faker->word()),
-            'size' => $this->faker->randomNumber(3, false),
-            'measure_unit' => $this->faker->randomElement(['kg', 'un', 'l', 'ml', 'g', 'mg']),
+            'measure_unit' => $this->faker->randomNumber(3, false) . ' ' . $this->faker->randomElement(['kg', 'un', 'l', 'ml', 'g', 'mg']),
             'price' => $this->faker->randomFloat(2, 0, 999),
             'active' => $this->faker->boolean(),
             'description' => $this->faker->text(),
