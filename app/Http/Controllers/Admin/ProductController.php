@@ -18,7 +18,7 @@ class ProductController extends Controller
      */
     public function index(Company $company)
     {
-        $products = Product::where('company_id', $company->id)->paginate(5);
+        $products = Product::where('company_id', $company->id)->orderBy('active', 'desc')->paginate(5);
         return view('admin.product.index', [
             'products' => $products,
             'company' => $company,
