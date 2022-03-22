@@ -55,7 +55,8 @@
                         <div class="row">
                             <div class="col"></div>
                             <div class="col-auto float-md-right">
-                                <a href="{{ route('companies.show', $company) }}" class="btn btn-default" title="Informações">
+                                <a href="{{ route('companies.show', $company) }}" class="btn btn-default"
+                                    title="Informações">
                                     <i class="fas fa-fw fa-info"></i>
                                 </a>
                             </div>
@@ -65,13 +66,8 @@
                                 </a>
                             </div>
                             <div class="col-auto float-md-right">
-                                <form action="{{ route('companies.destroy', $company) }}" method="post">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger" title="Desativar">
-                                        <i class="fas fa-fw fa-ban"></i>
-                                    </button>
-                                </form>
+                                <x-adminlte-button icon="fas fa-fw fa-ban" theme="danger" title="Desativar"
+                                    data-toggle="modal" data-target="#modalDelete" data-id="{{ $company->id }}" />
                             </div>
                         </div>
                     </x-adminlte-card>
@@ -88,4 +84,26 @@
             </div>
         </div>
     </x-adminlte-card>
+    <x-adminlte-modal id="modalDelete" title="Desativar empresa">
+        <h3>Deseja desativar a empresa?</h3>
+        <x-slot name="footerSlot">
+            <form action="#" method="post">
+                @csrf
+                @method('delete')
+                <x-adminlte-button type="submit" label="Sim" theme="danger" />
+                <x-adminlte-button theme="default" label="Não" data-dismiss="modal" />
+            </form>
+        </x-slot>
+    </x-adminlte-modal>
+@endsection
+
+@section('js')
+    <script>
+        $('#modalDelete').on('show.bs.modal', function(event) {
+            let button = $(event.relatedTarget);
+            let id = button.data('id');
+            var modal = $(this);
+            modal.find('form').attr('action', '{{ route('companies.destroy', '_ID_') }}'.replace('_ID_', id));
+        });
+    </script>
 @endsection
