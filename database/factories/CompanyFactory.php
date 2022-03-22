@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class CompanyFactory extends Factory
@@ -13,8 +14,12 @@ class CompanyFactory extends Factory
      */
     public function definition()
     {
+        $company = $this->faker->unique()->company();
         return [
-            //
+            'name' => $company,
+            'corporate_name' => $company,
+            'cnpj' => $this->faker->unique()->cnpj(false),
+            'owner_id' => User::first()->id,
         ];
     }
 }

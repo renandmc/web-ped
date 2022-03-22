@@ -20,65 +20,59 @@
 
 @section('content')
     <x-adminlte-card>
-        <div class="row mb-4">
-            <div class="col"></div>
-            <div class="col-auto float-md-right">
-                <a href="{{ route('companies.edit', $company) }}" class="btn btn-primary">
-                    <i class="fas fa-fw fa-pencil-alt"></i>
-                    Editar
-                </a>
-            </div>
-            <div class="col-auto float-md-right">
-                <form action="{{ route('companies.destroy', $company) }}" method="post">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">
-                        <i class="fas fa-fw fa-ban"></i>
-                        Desativar
-                    </button>
-                </form>
-            </div>
-        </div>
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-6 my-auto">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-md-5 text-center">
                         <img src="{{ $company->image_url }}" alt="Foto {{ $company->name }}" class="img-rounded mw-75">
                     </div>
-                    <div class="col-md-9">
-                        <p class="card-text">{{ $company->name }}</p>
-                        <p class="card-text">{{ $company->cnpj }}</p>
-                        <p class="card-text">{{ $company->corporate_name }}</p>
+                    <div class="col-md-7">
                         <p class="card-text">
                             <span class="badge badge-{{ $company->active ? 'success' : 'danger' }}">
                                 {{ $company->active ? 'Ativa' : 'Inativa' }}
                             </span>
                         </p>
+                        <p class="card-text">
+                            <span class="font-weight-bold">CNPJ:</span>
+                            {{ $company->cnpj }}
+                        </p>
+                        <p class="card-text">
+                            <span class="font-weight-bold">Nome:</span>
+                            {{ $company->name }}
+                        </p>
+                        <p class="card-text">
+                            <span class="font-weight-bold">Razão social:</span>
+                            {{ $company->corporate_name }}
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 my-auto">
-                <div class="row mb-2">
-
-                </div>
+            <div class="col-md-6">
                 <div class="row">
-
+                    <div class="col-6">
+                        <a href="{{ route('companies.products.index', [$company]) }}">
+                            <x-adminlte-info-box title="Produtos" text="{{ count($company->products) }}"
+                                icon="fas fa-lg fa-box-open" icon-theme="primary" />
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="#">
+                            <x-adminlte-info-box title="Clientes" text="0" icon="fas fa-lg fa-users" icon-theme="primary" />
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="#">
+                            <x-adminlte-info-box title="Pedidos enviados" text="0" icon="fas fa-lg fa-file-upload"
+                                icon-theme="primary" />
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="#">
+                            <x-adminlte-info-box title="Pedidos recebidos" text="0" icon="fas fa-lg fa-file-download"
+                                icon-theme="primary" />
+                        </a>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <hr>
-        <div class="row">
-            <div class="col-12">
-                Relatório
-            </div>
-            <div class="col">
-                produtos
-            </div>
-            <div class="col">
-                pedidos enviados
-            </div>
-            <div class="col">
-                pedidos recebidos
             </div>
         </div>
     </x-adminlte-card>
