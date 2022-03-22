@@ -55,9 +55,6 @@
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <x-adminlte-input name="size" label="Tamanho *" type="number" value="{{ old('size') }}" required />
-                </div>
-                <div class="col-md-3">
                     <x-adminlte-input name="measure_unit" label="Unidade medida *" maxlength="100"
                         value="{{ old('measure_unit') }}" required />
                 </div>
