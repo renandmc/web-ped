@@ -16,7 +16,7 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
-            $table->string('measure_unit', 10);
+            $table->string('measure_unit', 20);
             $table->decimal('price', 10, 2);
             $table->boolean('active')->default(true);
             $table->string('image_url', 100)->nullable();
