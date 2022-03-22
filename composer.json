@@ -1,11 +1,20 @@
 {
-    "name": "laravel/laravel",
+    "name": "renandmc/web-ped",
     "type": "project",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "description": "Sistema WEB PED de tiragem de pedidos online",
+    "keywords": [
+        "framework",
+        "laravel",
+        "pedidos",
+        "orders",
+        "online",
+        "tiragem",
+        "pedidos"
+    ],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.0",
+        "php": "^7.3",
+        "fakerphp/faker": "^1.9.1",
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "jeroennoten/laravel-adminlte": "^3.7",
@@ -16,7 +25,6 @@
     },
     "require-dev": {
         "facade/ignition": "^2.5",
-        "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "laravel/telescope": "^4.8",
         "lucascudo/laravel-pt-br-localization": "^1.1",
