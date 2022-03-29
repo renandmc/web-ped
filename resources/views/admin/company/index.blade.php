@@ -30,7 +30,7 @@
                 <div class="col-md-4">
                     <x-adminlte-card title="{{ $company->name }}">
                         <div class="row">
-                            <div class="col-md-4 order-md-last">
+                            <div class="col-md-4">
                                 <img src="{{ $company->image_url }}" alt="Foto {{ $company->name }}"
                                     class="img-fluid img-rounded w-100">
                             </div>
@@ -42,13 +42,8 @@
                                         </span>
                                     </span>
                                 </p>
-                                <p class="card-text">
-                                    <span class="text-bold">CNPJ:</span> {{ $company->cnpj }}
-                                </p>
-                                <p class="card-text">
-                                    <span class="text-bold">Razão social:</span>
-                                    {{ $company->corporate_name ?? '-' }}
-                                </p>
+                                <p class="card-text">{{ $company->cnpj }}</p>
+                                <p class="card-text">{{ $company->corporate_name }}</p>
                             </div>
                         </div>
                         <hr>

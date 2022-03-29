@@ -239,14 +239,10 @@ return [
         ],
         ['header' => 'Empresas'],
         [
-            'text' => 'Comprar',
-            'url' => '#',
-            'icon' => 'fas fa-fw fa-shopping-cart'
-        ],
-        [
-            'text' => 'Vender',
-            'url' => '#',
-            'icon' => 'fas fa-fw fa-store'
+            'text' => 'Empresas',
+            'route' => 'companies.index',
+            'active' => ['admin/companies*'],
+            'icon' => 'fas fa-fw fa-building',
         ],
         ['header' => 'Configurações'],
         [
@@ -255,12 +251,7 @@ return [
             'active' => ['admin/user*'],
             'icon' => 'fas fa-fw fa-user',
         ],
-        [
-            'text' => 'Empresas',
-            'route' => 'companies.index',
-            'active' => ['admin/companies*'],
-            'icon' => 'fas fa-fw fa-building',
-        ],
+
     ],
 
     /*
