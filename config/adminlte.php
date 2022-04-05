@@ -239,14 +239,23 @@ return [
         ],
         ['header' => 'Empresas'],
         [
-            'text' => 'Comprar',
-            'url' => '#',
-            'icon' => 'fas fa-fw fa-shopping-cart'
+            'text' => 'Empresas',
+            'route' => 'companies.index',
+            'active' => ['admin/companies*'],
+            'icon' => 'fas fa-fw fa-building',
+        ],
+        ['header' => 'Vínculos'],
+        [
+            'text' => 'Solicitar',
+            'route' => 'partners.create',
+            'active' => ['admin/partners/send'],
+            'icon' => 'fas fa-fw fa-handshake',
         ],
         [
-            'text' => 'Vender',
-            'url' => '#',
-            'icon' => 'fas fa-fw fa-store'
+            'text' => 'Aprovar',
+            'route' => 'partners.approve',
+            'active' => ['admin/partners/approve'],
+            'icon' => 'fas fa-fw fa-handshake',
         ],
         ['header' => 'Configurações'],
         [
@@ -255,12 +264,7 @@ return [
             'active' => ['admin/user*'],
             'icon' => 'fas fa-fw fa-user',
         ],
-        [
-            'text' => 'Empresas',
-            'route' => 'companies.index',
-            'active' => ['admin/companies*'],
-            'icon' => 'fas fa-fw fa-building',
-        ],
+
     ],
 
     /*

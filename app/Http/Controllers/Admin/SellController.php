@@ -8,18 +8,19 @@ use App\Http\Requests\Company\StoreCompanyRequest;
 use App\Http\Requests\Company\UpdateCompanyRequest;
 use Illuminate\Support\Facades\Auth;
 
-class CompanyController extends Controller
+class SellController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Company $company)
     {
-        $companies = Company::where('owner_id', Auth::id())->get();
-        return view('admin.company.index', [
-            'companies' => $companies
+        $buyers = $company->buyers()->paginate(6);
+        return view('admin.sell.index', [
+            'company' => $company,
+            'buyers' => $buyers
         ]);
     }
 
