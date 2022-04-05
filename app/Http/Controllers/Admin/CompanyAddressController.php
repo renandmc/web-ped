@@ -105,7 +105,7 @@ class CompanyAddressController extends Controller
      * @param  \App\Models\CompanyAddress  $address
      * @return \Illuminate\Http\Response
      */
-    public function destroy(CompanyAddress $adress, Request $request)
+    public function destroy(CompanyAddress $adress)
     {
         $company = $adress->company;
         $adress->delete();

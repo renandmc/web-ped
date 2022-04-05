@@ -244,6 +244,19 @@ return [
             'active' => ['admin/companies*'],
             'icon' => 'fas fa-fw fa-building',
         ],
+        ['header' => 'Vínculos'],
+        [
+            'text' => 'Solicitar',
+            'route' => 'partners.create',
+            'active' => ['admin/partners/send'],
+            'icon' => 'fas fa-fw fa-handshake',
+        ],
+        [
+            'text' => 'Aprovar',
+            'route' => 'partners.approve',
+            'active' => ['admin/partners/approve'],
+            'icon' => 'fas fa-fw fa-handshake',
+        ],
         ['header' => 'Configurações'],
         [
             'text' => 'profile',

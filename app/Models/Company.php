@@ -46,10 +46,34 @@ class Company extends Model
             ->withPivot('status');
     }
 
+    public function buyersPending()
+    {
+        return $this->belongsToMany(Company::class, 'partners', 'seller_id', 'buyer_id')
+            ->wherePivot('status', 'Pendente');
+    }
+
+    public function buyersActive()
+    {
+        return $this->belongsToMany(Company::class, 'partners', 'seller_id', 'buyer_id')
+            ->wherePivot('status', 'Ativo');
+    }
+
+    public function buyersInactive()
+    {
+        return $this->belongsToMany(Company::class, 'partners', 'seller_id', 'buyer_id')
+            ->wherePivot('status', 'Inativo');
+    }
+
     public function sellers()
     {
         return $this->belongsToMany(Company::class, 'partners', 'buyer_id', 'seller_id')
             ->withPivot('status');
+    }
+
+    public function sellersActive()
+    {
+        return $this->belongsToMany(Company::class, 'partners', 'buyer_id', 'seller_id')
+            ->wherePivot('status', 'Ativo');
     }
 
     protected function getCnpjAttribute($value)

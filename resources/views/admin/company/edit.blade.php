@@ -33,11 +33,11 @@
                         value="{{ old('cnpj') ?? $company->cnpj }}" required />
                 </div>
                 <div class="col-md">
-                    <x-adminlte-input name="name" label="Nome *" class="text-uppercase" maxlength="100"
+                    <x-adminlte-input name="name" label="Nome *" maxlength="100"
                         value="{{ old('name') ?? $company->name }}" required />
                 </div>
                 <div class="col-md">
-                    <x-adminlte-input name="corporate_name" label="Razão social *" class="text-uppercase" maxlength="100"
+                    <x-adminlte-input name="corporate_name" label="Razão social *" maxlength="100"
                         value="{{ old('corporate_name') ?? $company->corporate_name }}" required />
                 </div>
                 <div class="col-auto">

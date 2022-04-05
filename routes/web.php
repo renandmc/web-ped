@@ -48,18 +48,18 @@ Route::prefix('admin')
                 Route::put('update-password', [ProfileController::class, 'updatePassword'])
                     ->name('.update-password');
             });
+        Route::get('partners/approve', [PartnerController::class, 'approve'])
+            ->name('partners.approve');
+        Route::get('partners/create', [PartnerController::class, 'create'])
+            ->name('partners.create');
         Route::resource('companies', CompanyController::class);
         Route::get('companies/{company}/buy', [BuyController::class, 'index'])
-            ->name('buy.index');
+            ->name('buy');
         Route::get('companies/{company}/sell', [SellController::class, 'index'])
-            ->name('sell.index');
+            ->name('sell');
         Route::resource('companies.adresses', CompanyAddressController::class)
             ->only(['store', 'destroy'])
             ->shallow();
         Route::resource('companies.products', ProductController::class)
-            ->shallow();
-        Route::get('companies/partners/select-company', [PartnerController::class, 'selectCompany'])
-            ->name('companies.partners.select-company');
-        Route::resource('companies.partners', PartnerController::class)
             ->shallow();
     });

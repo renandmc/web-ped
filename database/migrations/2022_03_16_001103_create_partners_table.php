@@ -14,7 +14,6 @@ class CreatePartnersTable extends Migration
     public function up()
     {
         Schema::create('partners', function (Blueprint $table) {
-            $table->id();
             $table->foreignId('buyer_id')
                 ->constrained('companies')
                 ->cascadeOnDelete()
@@ -23,7 +22,9 @@ class CreatePartnersTable extends Migration
                 ->constrained('companies')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->timestamps();
+            $table->string('status', 50)
+                ->default('Pendente');
+            $table->unique(['buyer_id', 'seller_id']);
         });
     }
 
