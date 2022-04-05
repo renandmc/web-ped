@@ -1,5 +1,8 @@
 @extends('adminlte::page')
 
+@section('plugins.Datatables', true)
+@section('plugins.DatatablesPlugins', true)
+
 @section('content_header')
     <x-adminlte-card>
         <div class="row">
@@ -37,12 +40,15 @@
                         @foreach ($companies as $company)
                             @if (count($company->buyers) > 0)
                                 <div class="tab-pane fade" id="c-{{ $company->id }}">
-                                    <table class="table">
-                                        <tr>
-                                            <th>Empresa</th>
-                                            <th>Status</th>
-                                            <th>Opções</th>
-                                        </tr>
+                                    @php
+                                        $heads = [['label' => 'Status', 'width' => 20], 'Empresa', ['label' => 'Opções', 'width' => 20]];
+                                        $config = [
+                                            'order' => [[0, 'asc'], [1, 'asc']],
+                                            'columns' => [null, null, ['orderable' => false, 'searchable' => false]],
+                                        ];
+                                    @endphp
+                                    <x-adminlte-datatable id="t-c-{{ $company->id }}" :heads="$heads" :config="$config"
+                                        hoverable beautify>
                                         @forelse ($company->buyers as $buyer)
                                             @php
                                                 $status = $buyer->pivot->status;
@@ -50,12 +56,12 @@
                                                 $label = $status == 'Pendente' ? 'Aprovar' : ($status == 'Ativo' ? 'Inativar' : 'Reativar');
                                             @endphp
                                             <tr>
-                                                <td>{{ $buyer->name }}</td>
                                                 <td>
                                                     <span class="badge badge-{{ $class }}">
                                                         {{ $status }}
                                                     </span>
                                                 </td>
+                                                <td>{{ $buyer->name }}</td>
                                                 <td>
                                                     <a href="#">{{ $label }} vínculo</a>
                                                 </td>
@@ -65,7 +71,7 @@
                                                 <td colspan="3">Nenhum vínculo</td>
                                             </tr>
                                         @endforelse
-                                    </table>
+                                    </x-adminlte-datatable>
                                 </div>
                             @else
                                 <div class="tab-pane fade" id="c-{{ $company->id }}">
@@ -88,6 +94,11 @@
 
 @section('js')
     <script>
-        $('#pills a:first-child').tab('show')
+        $('#pills a:first-child').tab('show');
+        $.extend(true, $.fn.dataTable.defaults, {
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.11.4/i18n/pt_br.json"
+            }
+        });
     </script>
 @endsection
