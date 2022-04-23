@@ -52,6 +52,10 @@ Route::prefix('admin')
             ->name('partners.approve');
         Route::get('partners/create', [PartnerController::class, 'create'])
             ->name('partners.create');
+        Route::post('partners', [PartnerController::class, 'store'])
+            ->name('partners.store');
+        Route::put('partners', [PartnerController::class, 'update'])
+            ->name('partners.update');
         Route::resource('companies', CompanyController::class);
         Route::get('companies/{company}/buy', [BuyController::class, 'index'])
             ->name('buy');

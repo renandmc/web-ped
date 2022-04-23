@@ -39,7 +39,7 @@
                         'lengthMenu' => [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
                     ];
                 @endphp
-                <x-adminlte-datatable id="tableCompanies" :heads="$heads" :config="$config" hoverable beautify with-buttons>
+                <x-adminlte-datatable id="tableCompanies" :heads="$heads" :config="$config" hoverable beautify>
                     @forelse ($companies as $company)
                         <tr>
                             <td>

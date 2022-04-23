@@ -41,7 +41,7 @@
                             @if (count($company->buyers) > 0)
                                 <div class="tab-pane fade" id="c-{{ $company->id }}">
                                     @php
-                                        $heads = [['label' => 'Status', 'width' => 20], 'Empresa', ['label' => 'Opções', 'width' => 20]];
+                                        $heads = ['Status', 'Empresa', 'Opções'];
                                         $config = [
                                             'order' => [[0, 'asc'], [1, 'asc']],
                                             'columns' => [null, null, ['orderable' => false, 'searchable' => false]],
@@ -52,8 +52,8 @@
                                         @forelse ($company->buyers as $buyer)
                                             @php
                                                 $status = $buyer->pivot->status;
-                                                $class = $status == 'Pendente' ? 'warning' : ($status == 'Ativo' ? 'success' : 'danger');
-                                                $label = $status == 'Pendente' ? 'Aprovar' : ($status == 'Ativo' ? 'Inativar' : 'Reativar');
+                                                $class = $status == 'Pendente' ? 'warning' : 'success';
+                                                $label = $status == 'Pendente' ? 'Aprovar' : 'Remover';
                                             @endphp
                                             <tr>
                                                 <td>
@@ -63,7 +63,7 @@
                                                 </td>
                                                 <td>{{ $buyer->name }}</td>
                                                 <td>
-                                                    <a href="#">{{ $label }} vínculo</a>
+                                                    <a href="#">{{ $label }}</a>
                                                 </td>
                                             </tr>
                                         @empty

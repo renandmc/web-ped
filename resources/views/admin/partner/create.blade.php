@@ -40,7 +40,7 @@
                         @foreach ($companies as $company)
                             <div class="tab-pane fade" id="c-{{ $company->id }}">
                                 @php
-                                    $heads = [['label' => 'Status', 'width' => 20], 'Empresa', ['label' => 'Opções', 'width' => 20]];
+                                    $heads = ['Status', 'Empresa', 'Opções'];
                                     $config = [
                                         'order' => [[0, 'asc'], [1, 'asc']],
                                         'columns' => [null, null, ['orderable' => false, 'searchable' => false]],
@@ -53,8 +53,8 @@
                                             @php
                                                 $buyer = $seller->buyers->find($company->id);
                                                 $status = $buyer->pivot->status;
-                                                $class = $status == 'Pendente' ? 'warning' : ($status == 'Ativo' ? 'success' : 'danger');
-                                                $label = $status == 'Pendente' ? 'Aguardar' : ($status == 'Inativo' ? 'Solicitar' : '');
+                                                $class = $status == 'Pendente' ? 'warning' : 'success';
+                                                $label = $status == 'Pendente' ? 'Aguardar confirmação' : '';
                                             @endphp
                                             <tr>
                                                 <td>
@@ -63,9 +63,7 @@
                                                     </span>
                                                 </td>
                                                 <td>{{ $seller->name }}</td>
-                                                <td>
-                                                    <a href="#">{{ $label }}</a>
-                                                </td>
+                                                <td>{{ $label }}</td>
                                             </tr>
                                         @else
                                             <tr>
@@ -76,7 +74,11 @@
                                                 </td>
                                                 <td>{{ $seller->name }}</td>
                                                 <td>
-                                                    <a href="#">Solicitar</a>
+                                                    <a href="#" data-toggle="modal" data-target="#modalSolicitacao"
+                                                        data-buyer="{{ $company->id }}"
+                                                        data-seller="{{ $seller->id }}">
+                                                        Solicitar
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endif
@@ -99,6 +101,18 @@
             </div>
         @endif
     </div>
+    <x-adminlte-modal id="modalSolicitacao" title="Solicitar vínculo">
+        <h3>Deseja confirmar a solicitação?</h3>
+        <x-slot name="footerSlot">
+            <form action="{{ route('partners.store') }}" method="post">
+                @csrf
+                <input type="hidden" name="seller" value="">
+                <input type="hidden" name="buyer" value="">
+                <x-adminlte-button type="submit" label="Sim" theme="primary" />
+                <x-adminlte-button label="Não" theme="default" data-dismiss="modal" />
+            </form>
+        </x-slot>
+    </x-adminlte-modal>
 @endsection
 
 @section('js')
@@ -108,6 +122,14 @@
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.11.4/i18n/pt_br.json"
             }
+        });
+        $('#modalSolicitacao').on('show.bs.modal', function(event) {
+            let button = $(event.relatedTarget);
+            let seller = button.data('seller');
+            let buyer = button.data('buyer');
+            var modal = $(this);
+            modal.find('input[name="seller"]').val(seller);
+            modal.find('input[name="buyer"]').val(buyer);
         });
     </script>
 @endsection
