@@ -53,7 +53,7 @@
                         <img src="{{ asset('img/pedido.jpg') }}" alt="" class="w-100 rounded">
                     </div>
                     <div class="col-8">
-                        <p class="lead">O WEB PED oferece um site com o catálogo dos produtos disponíveis dos vendedores, que simplifica a comercialização dos produtos para seus clientes, o contrário de outros vendedores, que só realizam tiragem de pedidos pessoalmente, oferecemos um site com a possibilidade da tiragem online.</p>
+                        <p class="lead">O WEB PED oferece um site com o catálogo dos produtos disponíveis dos vendedores, que simplifica a comercialização dos produtos para seus clientes, ao contrário de outros vendedores, que só realizam tiragem de pedidos pessoalmente, oferecemos um site com a possibilidade da tiragem online.</p>
                     </div>
                 </div>
             </div>
