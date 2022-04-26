@@ -18,8 +18,7 @@ class CompanyFactory extends Factory
         return [
             'name' => $company,
             'corporate_name' => $company,
-            'cnpj' => $this->faker->unique()->cnpj(false),
-            'owner_id' => User::first()->id,
+            'cnpj' => $this->faker->unique()->cnpj(false)
         ];
     }
 }

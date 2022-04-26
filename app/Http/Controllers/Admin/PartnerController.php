@@ -75,15 +75,29 @@ class PartnerController extends Controller
     {
         $this->validate($request, [
             'seller' => 'required|integer',
-            'buyer' => 'required|integer',
-            'status' => 'required|string|in:Ativo,Inativo'
+            'buyer' => 'required|integer'
         ]);
 
         $buyer = Company::find($request->buyer);
-        $buyer->sellers()->attach($request->seller, ['status' => $request->status]);
+        $buyer->sellers()->updateExistingPivot($request->seller, ['status' => 'Ativo']);
 
         $buyer->save();
 
-        return redirect()->back()->with('success', 'Parceiro atualizado com sucesso!');
+        return redirect()->back()->with('success', 'Parceiro aprovado com sucesso!');
+    }
+
+    public function destroy(Request $request): RedirectResponse
+    {
+        $this->validate($request, [
+            'seller' => 'required|integer',
+            'buyer' => 'required|integer'
+        ]);
+
+        $buyer = Company::find($request->buyer);
+        $buyer->sellers()->detach($request->seller);
+
+        $buyer->save();
+
+        return redirect()->back()->with('success', 'Parceiro removido com sucesso!');
     }
 }

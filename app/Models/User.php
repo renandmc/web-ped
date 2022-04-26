@@ -60,4 +60,8 @@ class User extends Authenticatable
     {
         return 'admin/user/profile';
     }
+
+    public function companies() {
+        return $this->hasMany(Company::class, 'owner_id');
+    }
 }

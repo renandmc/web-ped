@@ -23,12 +23,19 @@
         @if (count($companies) > 0)
             <div class="col-3">
                 <x-adminlte-card>
+                    <h5>Suas empresas</h5>
+                    <hr>
                     <div class="nav flex-column nav-pills" id="pills">
                         @foreach ($companies as $company)
                             <a href="#c-{{ $company->id }}" class="nav-link" data-toggle="pill">
                                 {{ $company->name }}
                                 &nbsp;
-                                <span class="badge badge-secondary">{{ count($company->buyers) }}</span>
+                                @if (count($company->buyersActive) > 0)
+                                    <span class="badge badge-success">{{ count($company->buyersActive) }}</span>
+                                @endif
+                                @if (count($company->buyersPending) > 0)
+                                    <span class="badge badge-warning">{{ count($company->buyersPending) }}</span>
+                                @endif
                             </a>
                         @endforeach
                     </div>
@@ -36,6 +43,8 @@
             </div>
             <div class="col-9">
                 <x-adminlte-card>
+                    <h5>Solicitações</h5>
+                    <hr>
                     <div class="tab-content">
                         @foreach ($companies as $company)
                             @if (count($company->buyers) > 0)
@@ -45,6 +54,7 @@
                                         $config = [
                                             'order' => [[0, 'asc'], [1, 'asc']],
                                             'columns' => [null, null, ['orderable' => false, 'searchable' => false]],
+                                            'lengthMenu' => [[5, 10, 25], [5, 10, 25]],
                                         ];
                                     @endphp
                                     <x-adminlte-datatable id="t-c-{{ $company->id }}" :heads="$heads" :config="$config"
@@ -63,7 +73,13 @@
                                                 </td>
                                                 <td>{{ $buyer->name }}</td>
                                                 <td>
-                                                    <a href="#">{{ $label }}</a>
+                                                    <a href="#" data-toggle="modal"
+                                                        data-target="#modal{{ $label == 'Aprovar' ? 'Approve' : 'Remove' }}"
+                                                        data-buyer="{{ $buyer->id }}"
+                                                        data-seller="{{ $company->id }}"
+                                                        data-option="{{ $label }}">
+                                                        {{ $label }}
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @empty
@@ -75,7 +91,7 @@
                                 </div>
                             @else
                                 <div class="tab-pane fade" id="c-{{ $company->id }}">
-                                    <p class="card-text">Nenhum vínculo</p>
+                                    <p class="card-text">Nenhuma solicitação</p>
                                 </div>
                             @endif
                         @endforeach
@@ -90,6 +106,32 @@
             </div>
         @endif
     </div>
+    <x-adminlte-modal id="modalApprove" title="Aprovar vínculo">
+        <h3>Deseja aprovar a solicitação?</h3>
+        <x-slot name="footerSlot">
+            <form action="{{ route('partners.update') }}" method="post">
+                @csrf
+                @method('put')
+                <input type="hidden" name="seller" value="">
+                <input type="hidden" name="buyer" value="">
+                <x-adminlte-button type="submit" label="Sim" theme="primary" />
+                <x-adminlte-button label="Não" theme="default" data-dismiss="modal" />
+            </form>
+        </x-slot>
+    </x-adminlte-modal>
+    <x-adminlte-modal id="modalRemove" title="Remover vínculo">
+        <h3>Deseja remover o vínculo?</h3>
+        <x-slot name="footerSlot">
+            <form action="{{ route('partners.destroy') }}" method="post">
+                @csrf
+                @method('delete')
+                <input type="hidden" name="seller" value="">
+                <input type="hidden" name="buyer" value="">
+                <x-adminlte-button type="submit" label="Sim" theme="primary" />
+                <x-adminlte-button label="Não" theme="default" data-dismiss="modal" />
+            </form>
+        </x-slot>
+    </x-adminlte-modal>
 @endsection
 
 @section('js')
@@ -99,6 +141,22 @@
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.11.4/i18n/pt_br.json"
             }
+        });
+        $('#modalApprove').on('show.bs.modal', function(event) {
+            let button = $(event.relatedTarget);
+            let seller = button.data('seller');
+            let buyer = button.data('buyer');
+            var modal = $(this);
+            modal.find('input[name="seller"]').val(seller);
+            modal.find('input[name="buyer"]').val(buyer);
+        });
+        $('#modalRemove').on('show.bs.modal', function(event) {
+            let button = $(event.relatedTarget);
+            let seller = button.data('seller');
+            let buyer = button.data('buyer');
+            var modal = $(this);
+            modal.find('input[name="seller"]').val(seller);
+            modal.find('input[name="buyer"]').val(buyer);
         });
     </script>
 @endsection

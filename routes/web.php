@@ -48,14 +48,15 @@ Route::prefix('admin')
                 Route::put('update-password', [ProfileController::class, 'updatePassword'])
                     ->name('.update-password');
             });
-        Route::get('partners/approve', [PartnerController::class, 'approve'])
-            ->name('partners.approve');
-        Route::get('partners/create', [PartnerController::class, 'create'])
-            ->name('partners.create');
-        Route::post('partners', [PartnerController::class, 'store'])
-            ->name('partners.store');
-        Route::put('partners', [PartnerController::class, 'update'])
-            ->name('partners.update');
+        Route::prefix('partners')
+            ->name('partners')
+            ->group(function () {
+                Route::get('approve', [PartnerController::class, 'approve'])->name('.approve');
+                Route::get('create', [PartnerController::class, 'create'])->name('.create');
+                Route::post('/', [PartnerController::class, 'store'])->name('.store');
+                Route::put('/', [PartnerController::class, 'update'])->name('.update');
+                Route::delete('/', [PartnerController::class, 'destroy'])->name('.destroy');
+            });
         Route::resource('companies', CompanyController::class);
         Route::get('companies/{company}/buy', [BuyController::class, 'index'])
             ->name('buy');

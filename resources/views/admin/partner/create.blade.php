@@ -23,12 +23,13 @@
         @if (count($companies) > 0)
             <div class="col-3">
                 <x-adminlte-card>
+                    <h5>Suas empresas</h5>
+                    <hr>
                     <div class="nav flex-column nav-pills" id="pills">
                         @foreach ($companies as $company)
                             <a href="#c-{{ $company->id }}" class="nav-link" data-toggle="pill">
                                 {{ $company->name }}
                                 &nbsp;
-                                <span class="badge badge-secondary">{{ count($sellers) }}</span>
                             </a>
                         @endforeach
                     </div>
@@ -36,59 +37,62 @@
             </div>
             <div class="col-9">
                 <x-adminlte-card>
+                    <h5>Empresas disponíveis</h5>
+                    <hr>
                     <div class="tab-content">
                         @foreach ($companies as $company)
-                            <div class="tab-pane fade" id="c-{{ $company->id }}">
-                                @php
-                                    $heads = ['Status', 'Empresa', 'Opções'];
-                                    $config = [
-                                        'order' => [[0, 'asc'], [1, 'asc']],
-                                        'columns' => [null, null, ['orderable' => false, 'searchable' => false]],
-                                    ];
-                                @endphp
-                                <x-adminlte-datatable id="t-c-{{ $company->id }}" :heads="$heads" :config="$config"
-                                    hoverable beautify>
-                                    @forelse ($sellers as $seller)
-                                        @if ($seller->buyers->contains($company))
-                                            @php
-                                                $buyer = $seller->buyers->find($company->id);
-                                                $status = $buyer->pivot->status;
-                                                $class = $status == 'Pendente' ? 'warning' : 'success';
-                                                $label = $status == 'Pendente' ? 'Aguardar confirmação' : '';
-                                            @endphp
-                                            <tr>
-                                                <td>
-                                                    <span class="badge badge-{{ $class }}">
-                                                        {{ $status }}
-                                                    </span>
-                                                </td>
-                                                <td>{{ $seller->name }}</td>
-                                                <td>{{ $label }}</td>
-                                            </tr>
-                                        @else
-                                            <tr>
-                                                <td>
-                                                    <span class="badge badge-secondary">
-                                                        Sem vínculo
-                                                    </span>
-                                                </td>
-                                                <td>{{ $seller->name }}</td>
-                                                <td>
-                                                    <a href="#" data-toggle="modal" data-target="#modalSolicitacao"
-                                                        data-buyer="{{ $company->id }}"
-                                                        data-seller="{{ $seller->id }}">
-                                                        Solicitar
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        @endif
-                                    @empty
-                                        <tr>
-                                            <td colspan="3">Nenhum vínculo disponível</td>
-                                        </tr>
-                                    @endforelse
-                                </x-adminlte-datatable>
-                            </div>
+                            @if (count($sellers) > 0)
+                                <div class="tab-pane fade" id="c-{{ $company->id }}">
+                                    @php
+                                        $heads = ['Status', 'Empresa', 'Opções'];
+                                        $config = [
+                                            'order' => [[0, 'asc'], [1, 'asc']],
+                                            'columns' => [null, null, ['orderable' => false, 'searchable' => false]],
+                                            'lengthMenu' => [[5, 10, 25], [5, 10, 25]],
+                                        ];
+                                    @endphp
+                                    <x-adminlte-datatable id="t-c-{{ $company->id }}" :heads="$heads" :config="$config"
+                                        hoverable beautify>
+                                        @foreach ($sellers as $seller)
+                                            @if ($seller->buyers->contains($company))
+                                                @php
+                                                    $buyer = $seller->buyers->find($company->id);
+                                                    $status = $buyer->pivot->status;
+                                                    $class = $status == 'Pendente' ? 'warning' : 'success';
+                                                    $label = $status == 'Pendente' ? 'Aguardar confirmação' : '';
+                                                @endphp
+                                                <tr>
+                                                    <td>
+                                                        <span class="badge badge-{{ $class }}">
+                                                            {{ $status }}
+                                                        </span>
+                                                    </td>
+                                                    <td>{{ $seller->name }}</td>
+                                                    <td>{{ $label }}</td>
+                                                </tr>
+                                            @else
+                                                <tr>
+                                                    <td>
+                                                        <span class="badge badge-secondary">Sem vínculo</span>
+                                                    </td>
+                                                    <td>{{ $seller->name }}</td>
+                                                    <td>
+                                                        <a href="#" data-toggle="modal" data-target="#modalSolicitacao"
+                                                            data-buyer="{{ $company->id }}"
+                                                            data-seller="{{ $seller->id }}">
+                                                            Solicitar
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    </x-adminlte-datatable>
+                                </div>
+                            @else
+                                <div class="tab-pane fade" id="c-{{ $company->id }}">
+                                    <p class="card-text">Nenhuma empresa disponível</p>
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                 </x-adminlte-card>

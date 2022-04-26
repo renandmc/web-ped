@@ -20,15 +20,8 @@
         <div class="row">
             <div class="col-12 col-md-3 my-md-auto text-center">
                 <img src="{{ $user->adminlte_image() }}" alt="Foto perfil {{ $user->name }}" class="img-rounded mw-75">
-                <p>
-                    <small class="text-muted">
-                        <a href="https://br.gravatar.com/" target="_blank">gravatar.com</a>
-                        /
-                        <a href="https://ui-avatars.com/" target="_blank">ui-avatars.com</a>
-                    </small>
-                </p>
             </div>
-            <div class="col-12 col-md-9">
+            <div class="col-12 col-md-9 my-md-auto">
                 <div class="row">
                     <div class="col-12 col-md-8">
                         <h2>{{ $user->name }}</h2>
@@ -37,22 +30,22 @@
                             <a href="mailto:{{ $user->email }}" target="_blank"
                                 title="Enviar e-mail">{{ $user->email }}</a>
                         </p>
-                        <hr>
-                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Explicabo, error fuga ipsam nisi
-                            dignissimos a ex laudantium necessitatibus aut odio quod doloribus reiciendis cupiditate quaerat
-                            soluta deleniti consequatur temporibus porro?</p>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas ipsam suscipit obcaecati enim
-                            dolorum similique exercitationem. Odio quo accusamus impedit odit dignissimos tempora nam fugiat
-                            quae, quasi quas quos pariatur.</p>
                     </div>
-                    <div class="col-12 col-md-4 my-md-auto">
+                    <div class="col-12 col-md-4">
                         <a href="{{ route('user.edit-profile') }}" class="btn btn-block btn-default">
-                            <i class="fa fa-edit"></i>
+                            <i class="fa fa-pen"></i>
+                            &nbsp;
                             Alterar dados
                         </a>
                         <a href="{{ route('user.edit-password') }}" class="btn btn-block btn-default">
                             <i class="fa fa-key"></i>
+                            &nbsp;
                             Alterar senha
+                        </a>
+                        <a href="#" class="btn btn-block btn-danger">
+                            <i class="fas fa-user-slash"></i>
+                            &nbsp;
+                            Excluir conta
                         </a>
                     </div>
                 </div>

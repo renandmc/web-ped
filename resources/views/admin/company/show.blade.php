@@ -42,7 +42,7 @@
                             {{ $company->cnpj }}
                         </p>
                         <p class="card-text font-weight-light">
-                            Cadastrado em {{ $company->created_at->isoFormat('LL')}}
+                            Cadastrado em {{ $company->created_at->isoFormat('LL') }}
                         </p>
                     </div>
                 </div>
@@ -72,9 +72,9 @@
                     data-target="#modalAddress" label="Novo" />
             </div>
         </div>
-        @forelse ($company->adresses as $address)
-            <div class="row">
-                <div class="col-12">
+        <div class="row">
+            @forelse ($company->adresses as $address)
+                <div class="col-6">
                     <x-adminlte-card>
                         <div class="row">
                             <div class="col my-auto">
@@ -102,14 +102,14 @@
                         </div>
                     </x-adminlte-card>
                 </div>
-            </div>
-        @empty
-            <div class="col">
-                <p class="text-center">
-                    Nenhum endereço cadastrado
-                </p>
-            </div>
-        @endforelse
+            @empty
+                <div class="col">
+                    <p class="text-center">
+                        Nenhum endereço cadastrado
+                    </p>
+                </div>
+            @endforelse
+        </div>
     </x-adminlte-card>
     <x-adminlte-modal id="modalDelCompany" title="Desativar empresa">
         <h3>Deseja desativar a empresa?</h3>

@@ -36,7 +36,7 @@
                     $config = [
                         'order' => [[0, 'asc'], [1, 'asc']],
                         'columns' => [null, null, null, null, ['orderable' => false, 'searchable' => false]],
-                        'lengthMenu' => [[5, 10, 20, -1], [5, 10, 20, 'Todos']],
+                        'lengthMenu' => [[5, 10, 25], [5, 10, 25]],
                     ];
                 @endphp
                 <x-adminlte-datatable id="tableCompanies" :heads="$heads" :config="$config" hoverable beautify>
