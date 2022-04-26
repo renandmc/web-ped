@@ -28,7 +28,29 @@
     <x-adminlte-card>
         <h5>Vendedores vinculados</h5>
         <hr>
-        <p class="card-text">Nenhum vendedor</p>
+        <div class="row">
+            @if (count($company->sellersActive) > 0)
+                @foreach ($company->sellersActive as $seller)
+                    <div class="col-4">
+                        <x-adminlte-card>
+                            <div class="row">
+                                <div class="col-8">
+                                    <h6>{{ $seller->name }}</h6>
+                                    <p class="card-text">{{ $seller->cnpj }}</p>
+                                </div>
+                                <div class="col-4">
+                                    <a href="#" class="btn btn-block btn-default">Produtos</a>
+                                </div>
+                            </div>
+                        </x-adminlte-card>
+                    </div>
+                @endforeach
+            @else
+                <div class="col-12">
+                    <p class="card-text">Nenhum vendedor vinculado</p>
+                </div>
+            @endif
+        </div>
     </x-adminlte-card>
 @endsection
 

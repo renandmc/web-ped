@@ -18,11 +18,7 @@ class BuyController extends Controller
      */
     public function index(Company $company): View
     {
-        $companies = Company::where('id', '!=', $company->id)
-            ->where('owner_id', '!=', $company->owner->id)
-            ->where('active', true)->get();
         return view('admin.buy.index', [
-            'companies' => $companies,
             'company' => $company
         ]);
     }
