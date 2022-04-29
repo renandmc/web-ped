@@ -188,7 +188,7 @@ return [
     */
 
     'use_route_url' => false,
-    'dashboard_url' => 'home',
+    'dashboard_url' => 'admin',
     'logout_url' => 'logout',
     'login_url' => 'login',
     'register_url' => 'register',
@@ -232,10 +232,10 @@ return [
         ],
         // Sidebar items:
         [
-            'text' => 'dashboard',
-            'route' => 'home',
+            'text' => 'Painel',
+            'route' => 'dashboard',
             'icon' => 'fas fa-fw fa-chart-line',
-            'active' => ['home']
+            'active' => ['admin']
         ],
         ['header' => 'Empresas'],
         [

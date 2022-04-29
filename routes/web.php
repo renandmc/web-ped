@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BuyController;
 use App\Http\Controllers\Admin\CompanyAddressController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SellController;
@@ -28,43 +29,27 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::get('/home', [HomeController::class, 'index'])
-    ->name('home');
+//Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-Route::prefix('admin')
-    ->middleware('auth')
-    ->group(function () {
-        Route::prefix('user')
-            ->name('user')
-            ->group(function () {
-                Route::get('profile', [ProfileController::class, 'index'])
-                    ->name('.profile');
-                Route::get('edit-profile', [ProfileController::class, 'editProfile'])
-                    ->name('.edit-profile');
-                Route::put('update-profile', [ProfileController::class, 'updateProfile'])
-                    ->name('.update-profile');
-                Route::get('edit-password', [ProfileController::class, 'editPassword'])
-                    ->name('.edit-password');
-                Route::put('update-password', [ProfileController::class, 'updatePassword'])
-                    ->name('.update-password');
-            });
-        Route::prefix('partners')
-            ->name('partners')
-            ->group(function () {
-                Route::get('approve', [PartnerController::class, 'approve'])->name('.approve');
-                Route::get('create', [PartnerController::class, 'create'])->name('.create');
-                Route::post('/', [PartnerController::class, 'store'])->name('.store');
-                Route::put('/', [PartnerController::class, 'update'])->name('.update');
-                Route::delete('/', [PartnerController::class, 'destroy'])->name('.destroy');
-            });
-        Route::resource('companies', CompanyController::class);
-        Route::get('companies/{company}/buy', [BuyController::class, 'index'])
-            ->name('buy');
-        Route::get('companies/{company}/sell', [SellController::class, 'index'])
-            ->name('sell');
-        Route::resource('companies.adresses', CompanyAddressController::class)
-            ->only(['store', 'destroy'])
-            ->shallow();
-        Route::resource('companies.products', ProductController::class)
-            ->shallow();
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::prefix('user')->name('user')->group(function () {
+        Route::get('profile', [ProfileController::class, 'index'])->name('.profile');
+        Route::get('edit-profile', [ProfileController::class, 'editProfile'])->name('.edit-profile');
+        Route::put('update-profile', [ProfileController::class, 'updateProfile'])->name('.update-profile');
+        Route::get('edit-password', [ProfileController::class, 'editPassword'])->name('.edit-password');
+        Route::put('update-password', [ProfileController::class, 'updatePassword'])->name('.update-password');
     });
+    Route::prefix('partners')->name('partners')->group(function () {
+        Route::get('approve', [PartnerController::class, 'approve'])->name('.approve');
+        Route::get('create', [PartnerController::class, 'create'])->name('.create');
+        Route::post('/', [PartnerController::class, 'store'])->name('.store');
+        Route::put('/', [PartnerController::class, 'update'])->name('.update');
+        Route::delete('/', [PartnerController::class, 'destroy'])->name('.destroy');
+    });
+    Route::resource('companies', CompanyController::class);
+    Route::get('companies/{company}/buy', [BuyController::class, 'index'])->name('buy');
+    Route::get('companies/{company}/sell', [SellController::class, 'index'])->name('sell');
+    Route::resource('companies.adresses', CompanyAddressController::class)->only(['store', 'destroy'])->shallow();
+    Route::resource('companies.products', ProductController::class)->shallow();
+});

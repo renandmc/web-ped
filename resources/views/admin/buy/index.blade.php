@@ -30,21 +30,42 @@
         <hr>
         <div class="row">
             @if (count($company->sellersActive) > 0)
-                @foreach ($company->sellersActive as $seller)
-                    <div class="col-4">
-                        <x-adminlte-card>
-                            <div class="row">
-                                <div class="col-8">
-                                    <h6>{{ $seller->name }}</h6>
-                                    <p class="card-text">{{ $seller->cnpj }}</p>
-                                </div>
-                                <div class="col-4">
-                                    <a href="#" class="btn btn-block btn-default">Produtos</a>
-                                </div>
-                            </div>
-                        </x-adminlte-card>
-                    </div>
-                @endforeach
+                <div class="col-8">
+                    @foreach ($company->sellersActive as $seller)
+                        <h6>{{ $seller->name }}</h6>
+                        <p class="card-text">{{ $seller->cnpj }}</p>
+                        @php
+                            $heads = ['Imagem', 'Nome', 'Un. medida', 'Preço', 'Opções'];
+                            $config = [
+                                'order' => [[0, 'asc'], [1, 'asc']],
+                                'columns' => [null, null, null, null, ['orderable' => false, 'searchable' => false]],
+                                'lengthMenu' => [[3, 5, 10], [3, 5, 10]],
+                            ];
+                        @endphp
+                        <x-adminlte-datatable id="products-{{ $seller->id }}" :heads="$heads" :config="$config" hoverable beautify>
+                            @forelse ($seller->products as $product)
+                                <tr>
+                                    <td>
+                                        <img src="{{ $product->image_url }}" alt="" class="img-fluid rounded">
+                                    </td>
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product->measure_unit }}</td>
+                                    <td>R$ {{ number_format($product->price, 2, ',', '.') }}</td>
+                                    <td><a href="#">Adicionar</a></td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="3">Nenhum produto</td>
+                                </tr>
+                            @endforelse
+                        </x-adminlte-datatable>
+                    @endforeach
+                </div>
+                <div class="col-4">
+                    <h5>Pedido</h5>
+                    <hr>
+                    Itens
+                </div>
             @else
                 <div class="col-12">
                     <p class="card-text">Nenhum vendedor vinculado</p>
