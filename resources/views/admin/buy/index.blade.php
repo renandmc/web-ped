@@ -32,39 +32,42 @@
             @if (count($company->sellersActive) > 0)
                 <div class="col-8">
                     @foreach ($company->sellersActive as $seller)
-                        <h6>{{ $seller->name }}</h6>
-                        <p class="card-text">{{ $seller->cnpj }}</p>
-                        @php
-                            $heads = ['Imagem', 'Nome', 'Un. medida', 'Preço', 'Opções'];
-                            $config = [
-                                'order' => [[0, 'asc'], [1, 'asc']],
-                                'columns' => [null, null, null, null, ['orderable' => false, 'searchable' => false]],
-                                'lengthMenu' => [[3, 5, 10], [3, 5, 10]],
-                            ];
-                        @endphp
-                        <x-adminlte-datatable id="products-{{ $seller->id }}" :heads="$heads" :config="$config" hoverable beautify>
-                            @forelse ($seller->products as $product)
-                                <tr>
-                                    <td>
-                                        <img src="{{ $product->image_url }}" alt="" class="img-fluid rounded">
-                                    </td>
-                                    <td>{{ $product->name }}</td>
-                                    <td>{{ $product->measure_unit }}</td>
-                                    <td>R$ {{ number_format($product->price, 2, ',', '.') }}</td>
-                                    <td><a href="#">Adicionar</a></td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="3">Nenhum produto</td>
-                                </tr>
-                            @endforelse
-                        </x-adminlte-datatable>
+                        <x-adminlte-card title="{{ $seller->name }}" collapsible="collapsed">
+                            @php
+                                $heads = ['Imagem', 'Nome', 'Un. medida', 'Preço', 'Opções'];
+                                $config = [
+                                    'order' => [[0, 'asc'], [1, 'asc']],
+                                    'columns' => [null, null, null, null, ['orderable' => false, 'searchable' => false]],
+                                    'lengthMenu' => [[3, 5, 10], [3, 5, 10]],
+                                ];
+                            @endphp
+                            <x-adminlte-datatable id="products-{{ $seller->id }}" :heads="$heads" :config="$config"
+                                hoverable beautify>
+                                @forelse ($seller->products as $product)
+                                    <tr>
+                                        <td>
+                                            <img src="{{ $product->image_url }}" alt="" class="img-fluid rounded">
+                                        </td>
+                                        <td>{{ $product->name }}</td>
+                                        <td>{{ $product->measure_unit }}</td>
+                                        <td>R$ {{ number_format($product->price, 2, ',', '.') }}</td>
+                                        <td><a href="#">Adicionar</a></td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="3">Nenhum produto</td>
+                                    </tr>
+                                @endforelse
+                            </x-adminlte-datatable>
+                        </x-adminlte-card>
                     @endforeach
                 </div>
                 <div class="col-4">
-                    <h5>Pedido</h5>
-                    <hr>
-                    Itens
+                    <x-adminlte-card>
+                        <h5>Pedido</h5>
+                        <hr>
+                        Itens
+                    </x-adminlte-card>
                 </div>
             @else
                 <div class="col-12">
