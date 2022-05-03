@@ -4,107 +4,61 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Company;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Company\StoreCompanyRequest;
-use App\Http\Requests\Company\UpdateCompanyRequest;
-use Illuminate\Http\Response;
+use App\Models\Product;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 
 class BuyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return View
-     */
-    public function index(Company $company): View
+    public function index(): View
     {
+        $companies = Company::where('owner_id', Auth::id())
+            ->where('active', true)
+            ->with('sellersActive')
+            ->get();
         return view('admin.buy.index', [
-            'company' => $company
+            'companies' => $companies
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return View
-     */
-    public function create(): View
+    public function products(Request $request, Company $buyer, Company $seller): View
     {
-        return view('admin.company.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreCompanyRequest  $request
-     * @return Response
-     */
-    public function store(StoreCompanyRequest $request)
-    {
-        $validated = $request->validated();
-        $validated['owner_id'] = $request->user()->id;
-
-        Company::create($validated);
-
-        return redirect()->route('companies.index')->with('success', 'Empresa cadastrada com sucesso');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Company  $company
-     * @return Response
-     */
-    public function show(Company $company)
-    {
-        return view('admin.company.show', [
-            'company' => $company
+        $cart = $request->session()->get('cart', []);
+        return view('admin.buy.products', [
+            'buyer' => $buyer,
+            'seller' => $seller,
+            'cart' => $cart
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Company  $company
-     * @return Response
-     */
-    public function edit(Company $company)
+    public function addToCart(Request $request, Product $product)
     {
-        return view('admin.company.edit', [
-            'company' => $company
-        ]);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateCompanyRequest  $request
-     * @param  \App\Models\Company  $company
-     * @return Response
-     */
-    public function update(UpdateCompanyRequest $request, Company $company)
-    {
-        $validated = $request->validated();
-
-        $company->fill($validated);
-
-        $company->save();
-
-        return redirect()->route('companies.index')->with('success', 'Empresa atualizada com sucesso');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Company  $company
-     * @return Response
-     */
-    public function destroy(Company $company)
-    {
-        $company->active = false;
-
-        $company->save();
-
-        return redirect()->route('companies.index')->with('success', 'Empresa desativada com sucesso');
+        $cart = $request->session()->get('cart');
+        if (!$cart) {
+            $cart = [
+                $product->id => [
+                    "name" => $product->name,
+                    "quantity" => 1,
+                    "price" => $product->price,
+                    "image_url" => $product->image_url
+                ]
+            ];
+            session()->put('cart', $cart);
+            return redirect()->back()->with('success', 'Produto adicionado!');
+        }
+        if (isset($cart[$product->id])) {
+            $cart[$product->id]['quantity']++;
+            session()->put('cart', $cart);
+            return redirect()->back()->with('success', 'Produto adicionado!');
+        }
+        $cart[$product->id] = [
+            "name" => $product->name,
+            "quantity" => 1,
+            "price" => $product->price,
+            "image_url" => $product->image_url
+        ];
+        session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Produto adicionado!');
     }
 }

@@ -237,9 +237,22 @@ return [
             'icon' => 'fas fa-fw fa-chart-line',
             'active' => ['admin']
         ],
+        ['header' => 'Comprar/vender'],
+        [
+            'text' => 'Comprar',
+            'route' => 'buy',
+            'active' => ['admin/buy*'],
+            'icon' => 'fas fa-fw fa-shopping-cart',
+        ],
+        [
+            'text' => 'Vender',
+            'route' => 'sell',
+            'active' => ['admin/sell*'],
+            'icon' => 'fas fa-fw fa-store-alt',
+        ],
         ['header' => 'Empresas'],
         [
-            'text' => 'Empresas',
+            'text' => 'Minhas empresas',
             'route' => 'companies.index',
             'active' => ['admin/companies*'],
             'icon' => 'fas fa-fw fa-building',

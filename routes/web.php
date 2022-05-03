@@ -33,13 +33,13 @@ Auth::routes();
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-    Route::prefix('user')->name('user')->group(function () {
-        Route::get('profile', [ProfileController::class, 'index'])->name('.profile');
-        Route::get('edit-profile', [ProfileController::class, 'editProfile'])->name('.edit-profile');
-        Route::put('update-profile', [ProfileController::class, 'updateProfile'])->name('.update-profile');
-        Route::get('edit-password', [ProfileController::class, 'editPassword'])->name('.edit-password');
-        Route::put('update-password', [ProfileController::class, 'updatePassword'])->name('.update-password');
-    });
+    Route::get('buy', [BuyController::class, 'index'])->name('buy');
+    Route::get('buy/{buyer}/from/{seller}', [BuyController::class, 'products'])->name('buy.products');
+    Route::get('buy/add/{product}', [BuyController::class, 'addToCart'])->name('buy.add');
+    Route::get('sell', [SellController::class, 'index'])->name('sell');
+    Route::resource('companies', CompanyController::class);
+    Route::resource('companies.adresses', CompanyAddressController::class)->only(['store', 'destroy'])->shallow();
+    Route::resource('companies.products', ProductController::class)->shallow();
     Route::prefix('partners')->name('partners')->group(function () {
         Route::get('approve', [PartnerController::class, 'approve'])->name('.approve');
         Route::get('create', [PartnerController::class, 'create'])->name('.create');
@@ -47,9 +47,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::put('/', [PartnerController::class, 'update'])->name('.update');
         Route::delete('/', [PartnerController::class, 'destroy'])->name('.destroy');
     });
-    Route::resource('companies', CompanyController::class);
-    Route::get('companies/{company}/buy', [BuyController::class, 'index'])->name('buy');
-    Route::get('companies/{company}/sell', [SellController::class, 'index'])->name('sell');
-    Route::resource('companies.adresses', CompanyAddressController::class)->only(['store', 'destroy'])->shallow();
-    Route::resource('companies.products', ProductController::class)->shallow();
+    Route::prefix('user')->name('user')->group(function () {
+        Route::get('profile', [ProfileController::class, 'index'])->name('.profile');
+        Route::get('edit-profile', [ProfileController::class, 'editProfile'])->name('.edit-profile');
+        Route::put('update-profile', [ProfileController::class, 'updateProfile'])->name('.update-profile');
+        Route::get('edit-password', [ProfileController::class, 'editPassword'])->name('.edit-password');
+        Route::put('update-password', [ProfileController::class, 'updatePassword'])->name('.update-password');
+    });
 });

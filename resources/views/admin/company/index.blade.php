@@ -7,11 +7,11 @@
     <x-adminlte-card>
         <div class="row">
             <div class="col-sm-6">
-                <h1>Empresas</h1>
+                <h1>Minhas empresas</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item active">Empresas</li>
+                    <li class="breadcrumb-item active">Minhas empresas</li>
                 </ol>
             </div>
         </div>
@@ -43,10 +43,8 @@
                     @forelse ($companies as $company)
                         <tr>
                             <td>
-                                <span class="lead">
-                                    <span class="badge badge-{{ $company->active ? 'success' : 'danger' }}">
-                                        {{ $company->active ? 'Ativa' : 'Inativa' }}
-                                    </span>
+                                <span class="badge badge-{{ $company->active ? 'success' : 'danger' }}">
+                                    {{ $company->active ? 'Ativa' : 'Inativa' }}
                                 </span>
                             </td>
                             <td>{{ $company->name }}</td>
@@ -61,6 +59,12 @@
                                     <i class="fas fa-fw fa-store-alt"></i>
                                     Vender
                                 </a>
+                                <a href="{{ route('companies.products.index', $company) }}" class="btn btn-primary">
+                                    <i class="fas fa-fw fa-box-open"></i>
+                                    Produtos
+                                    &nbsp;
+                                    <span class="badge badge-light">{{ count($company->products) }}</span>
+                                </a>
                                 <a href="{{ route('companies.show', $company) }}" class="btn btn-default"
                                     title="Informações">
                                     <i class="fas fa-fw fa-info"></i>
@@ -70,7 +74,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5">Nenhuma empresa encontrada</td>
+                            <td colspan="5">Nenhuma empresa cadastrada</td>
                         </tr>
                     @endforelse
                 </x-adminlte-datatable>

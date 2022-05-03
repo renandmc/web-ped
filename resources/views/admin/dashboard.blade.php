@@ -19,11 +19,11 @@
     <x-adminlte-card>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-3">
-                <x-adminlte-small-box title="{{ count($myCompanies) ?? 0 }}" text="Suas empresas"
+                <x-adminlte-small-box title="{{ count($companies) ?? 0 }}" text="Todas as empresas"
                     icon="fas fa-lg fa-building" />
             </div>
             <div class="col-12 col-md-6 col-lg-3">
-                <x-adminlte-small-box title="{{ count($companies) ?? 0 }}" text="Todas as empresas"
+                <x-adminlte-small-box title="{{ count($myCompanies) ?? 0 }}" text="Minhas empresas"
                     icon="fas fa-lg fa-building" />
             </div>
             <div class="col-12 col-md-6 col-lg-3">

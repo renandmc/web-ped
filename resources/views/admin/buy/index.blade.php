@@ -11,12 +11,6 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('companies.index') }}">Empresas</a>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('companies.show', $company) }}">{{ $company->name }}</a>
-                    </li>
                     <li class="breadcrumb-item active">Comprar</li>
                 </ol>
             </div>
@@ -26,55 +20,53 @@
 
 @section('content')
     <x-adminlte-card>
-        <h5>Vendedores vinculados</h5>
-        <hr>
-        <div class="row">
-            @if (count($company->sellersActive) > 0)
-                <div class="col-8">
-                    @foreach ($company->sellersActive as $seller)
-                        <x-adminlte-card title="{{ $seller->name }}" collapsible="collapsed">
-                            @php
-                                $heads = ['Imagem', 'Nome', 'Un. medida', 'Preço', 'Opções'];
-                                $config = [
-                                    'order' => [[0, 'asc'], [1, 'asc']],
-                                    'columns' => [null, null, null, null, ['orderable' => false, 'searchable' => false]],
-                                    'lengthMenu' => [[3, 5, 10], [3, 5, 10]],
-                                ];
-                            @endphp
-                            <x-adminlte-datatable id="products-{{ $seller->id }}" :heads="$heads" :config="$config"
-                                hoverable beautify>
-                                @forelse ($seller->products as $product)
-                                    <tr>
-                                        <td>
-                                            <img src="{{ $product->image_url }}" alt="" class="img-fluid rounded">
-                                        </td>
-                                        <td>{{ $product->name }}</td>
-                                        <td>{{ $product->measure_unit }}</td>
-                                        <td>R$ {{ number_format($product->price, 2, ',', '.') }}</td>
-                                        <td><a href="#">Adicionar</a></td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="3">Nenhum produto</td>
-                                    </tr>
-                                @endforelse
-                            </x-adminlte-datatable>
-                        </x-adminlte-card>
-                    @endforeach
-                </div>
-                <div class="col-4">
-                    <x-adminlte-card>
-                        <h5>Pedido</h5>
-                        <hr>
-                        Itens
-                    </x-adminlte-card>
-                </div>
-            @else
-                <div class="col-12">
-                    <p class="card-text">Nenhum vendedor vinculado</p>
-                </div>
-            @endif
-        </div>
+        @forelse ($companies as $company)
+            @php
+                $countSellers = count($company->sellersActive);
+            @endphp
+            <x-adminlte-card title="{{ $company->name }} ({{ count($company->sellersActive) }} vendedores)" collapsible>
+                @if (count($company->sellersActive) > 0)
+                    @php
+                        $heads = ['Imagem', 'Nome', 'CNPJ', 'Opções'];
+                        $config = [
+                            'columns' => [
+                                ['orderable' => false, 'searchable' => false],
+                                null,
+                                null,
+                                ['orderable' => false, 'searchable' => false]
+                            ],
+                            'order' => [[1, 'asc']],
+                            'lengthMenu' => [[5, 10, 25], [5, 10, 25]],
+                        ];
+                    @endphp
+                    <x-adminlte-datatable id="sellers-{{ $company->id }}" :heads="$heads" :config="$config" beautify>
+                        @foreach ($company->sellersActive as $seller)
+                            <tr>
+                                <td>
+                                    <img src="{{ $seller->image_url }}" alt="{{ $seller->name }}"
+                                        class="rounded" height="100">
+                                </td>
+                                <td>{{ $seller->name }}</td>
+                                <td>{{ $seller->cnpj }}</td>
+                                <td>
+                                    <a href="{{ route('buy.products', [$company, $seller]) }}">
+                                        Ver produtos
+                                    </a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </x-adminlte-datatable>
+                @else
+                    <p class="card-text">
+                        Nenhum vendedor vinculado, <a href="{{ route('partners.create') }}">solicitar vínculos</a>.
+                    </p>
+                @endif
+            </x-adminlte-card>
+        @empty
+            <p class="card-text">
+                Nenhuma empresa cadastrada, <a href="{{ route('companies.create') }}">cadastrar nova</a>.
+            </p>
+        @endforelse
     </x-adminlte-card>
 @endsection
 
