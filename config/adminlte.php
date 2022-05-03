@@ -246,7 +246,8 @@ return [
         ],
         [
             'text' => 'Vender',
-            'route' => 'sell',
+            //'route' => 'sell',
+            'url' => '#',
             'active' => ['admin/sell*'],
             'icon' => 'fas fa-fw fa-store-alt',
         ],

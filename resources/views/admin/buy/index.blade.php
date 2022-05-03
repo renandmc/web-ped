@@ -44,7 +44,7 @@
                             <tr>
                                 <td>
                                     <img src="{{ $seller->image_url }}" alt="{{ $seller->name }}"
-                                        class="rounded" height="100">
+                                        class="rounded" height="75">
                                 </td>
                                 <td>{{ $seller->name }}</td>
                                 <td>{{ $seller->cnpj }}</td>

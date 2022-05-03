@@ -24,17 +24,19 @@ class BuyController extends Controller
 
     public function products(Request $request, Company $buyer, Company $seller): View
     {
-        $cart = $request->session()->get('cart', []);
+        $cartName = "cart-$buyer->id-$seller->id";
+        $cart = $request->session()->get($cartName, []);
         return view('admin.buy.products', [
             'buyer' => $buyer,
             'seller' => $seller,
-            'cart' => $cart
+            $cartName => $cart
         ]);
     }
 
     public function addToCart(Request $request, Product $product)
     {
-        $cart = $request->session()->get('cart');
+        $cartName = "cart-$request->buyer-$request->seller";
+        $cart = $request->session()->get($cartName);
         if (!$cart) {
             $cart = [
                 $product->id => [
@@ -44,12 +46,12 @@ class BuyController extends Controller
                     "image_url" => $product->image_url
                 ]
             ];
-            session()->put('cart', $cart);
+            session()->put($cartName, $cart);
             return redirect()->back()->with('success', 'Produto adicionado!');
         }
         if (isset($cart[$product->id])) {
             $cart[$product->id]['quantity']++;
-            session()->put('cart', $cart);
+            session()->put($cartName, $cart);
             return redirect()->back()->with('success', 'Produto adicionado!');
         }
         $cart[$product->id] = [
@@ -58,7 +60,21 @@ class BuyController extends Controller
             "price" => $product->price,
             "image_url" => $product->image_url
         ];
-        session()->put('cart', $cart);
+        session()->put($cartName, $cart);
         return redirect()->back()->with('success', 'Produto adicionado!');
+    }
+
+    public function remove(Request $request)
+    {
+        $cartName = "cart-$request->buyer-$request->seller";
+        if ($request->id) {
+            $cart = $request->session()->get($cartName);
+            if (isset($cart[$request->id])) {
+                unset($cart[$request->id]);
+                $request->session()->put($cartName, $cart);
+            }
+            return $request->session()->flash('success', 'Produto removido!');
+        }
+
     }
 }

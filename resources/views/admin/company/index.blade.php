@@ -51,14 +51,6 @@
                             <td>{{ $company->corporate_name }}</td>
                             <td>{{ $company->cnpj }}</td>
                             <td>
-                                <a href="{{ route('buy', $company) }}" class="btn btn-primary" title="Comprar">
-                                    <i class="fas fa-fw fa-shopping-cart"></i>
-                                    Comprar
-                                </a>
-                                <a href="{{ route('sell', $company) }}" class="btn btn-primary" title="Vender">
-                                    <i class="fas fa-fw fa-store-alt"></i>
-                                    Vender
-                                </a>
                                 <a href="{{ route('companies.products.index', $company) }}" class="btn btn-primary">
                                     <i class="fas fa-fw fa-box-open"></i>
                                     Produtos

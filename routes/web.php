@@ -36,6 +36,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('buy', [BuyController::class, 'index'])->name('buy');
     Route::get('buy/{buyer}/from/{seller}', [BuyController::class, 'products'])->name('buy.products');
     Route::get('buy/add/{product}', [BuyController::class, 'addToCart'])->name('buy.add');
+    Route::delete('buy/remove', [BuyController::class, 'remove'])->name('buy.remove');
     Route::get('sell', [SellController::class, 'index'])->name('sell');
     Route::resource('companies', CompanyController::class);
     Route::resource('companies.adresses', CompanyAddressController::class)->only(['store', 'destroy'])->shallow();
