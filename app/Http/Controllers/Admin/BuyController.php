@@ -22,15 +22,19 @@ class BuyController extends Controller
         ]);
     }
 
-    public function products(Request $request, Company $buyer, Company $seller): View
+    public function products(Request $request, Company $buyer, Company $seller)
     {
-        $cartName = "cart-$buyer->id-$seller->id";
-        $cart = $request->session()->get($cartName, []);
-        return view('admin.buy.products', [
-            'buyer' => $buyer,
-            'seller' => $seller,
-            $cartName => $cart
-        ]);
+        if ($buyer->sellersActive()->where('id', $seller->id)->count() === 0) {
+            return redirect()->route('buy');
+        } else {
+            $cartName = "cart-$buyer->id-$seller->id";
+            $cart = $request->session()->get($cartName, []);
+            return view('admin.buy.products', [
+                'buyer' => $buyer,
+                'seller' => $seller,
+                $cartName => $cart
+            ]);
+        }
     }
 
     public function addToCart(Request $request, Product $product)
@@ -76,5 +80,41 @@ class BuyController extends Controller
             return $request->session()->flash('success', 'Produto removido!');
         }
 
+    }
+
+    public function removeAll(Request $request)
+    {
+        $cartName = "cart-$request->buyer-$request->seller";
+        $request->session()->forget($cartName);
+        return $request->session()->flash('success', 'Todos os produtos removidos!');
+    }
+
+    public function checkout(Request $request, Company $buyer, Company $seller)
+    {
+        $cartName = "cart-$buyer->id-$seller->id";
+        $cart = $request->session()->get($cartName);
+        if (!$cart) {
+            return redirect()->route('buy');
+        }
+        $total = 0;
+        $items = [];
+        foreach ($cart as $id => $item) {
+            $subtotal = $item['price'] * $item['quantity'];
+            $total += $subtotal;
+            $items[] = [
+                'id' => $id,
+                'name' => $item['name'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price'],
+                'total_item' => $item['quantity'] * $item['price'],
+                'image_url' => $item['image_url']
+            ];
+        }
+        return view('admin.buy.checkout', [
+            'buyer' => $buyer,
+            'seller' => $seller,
+            'items' => $items,
+            'total' => $total,
+        ]);
     }
 }

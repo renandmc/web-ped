@@ -66,10 +66,15 @@
                             {{ $seller->name }}
                         </p>
                         <hr>
-                        @php $total = 0; @endphp
-                        @if (session("cart-$buyer->id-$seller->id"))
-                            @foreach (session("cart-$buyer->id-$seller->id") as $id => $details)
-                                @php $total += $details['price'] * $details['quantity']; @endphp
+                        @php
+                            $cartName = "cart-$buyer->id-$seller->id";
+                            $total = 0;
+                        @endphp
+                        @if (session($cartName))
+                            @foreach (session($cartName) as $id => $details)
+                                @php
+                                    $total += $details['price'] * $details['quantity'];
+                                @endphp
                                 <div class="row mb-2">
                                     <div class="col-auto">
                                         <img src="{{ $details['image_url'] }}" alt="{{ $details['name'] }}"
@@ -95,8 +100,7 @@
                                         </div>
                                     </div>
                                     <div class="col-auto my-auto">
-                                        <button class="btn btn-sm btn-danger removeCart" data-id="{{ $id }}"
-                                            data-buyer="{{ $buyer->id }}" data-seller="{{ $seller->id }}">
+                                        <button class="btn btn-sm btn-danger remove" data-id="{{ $id }}">
                                             <i class="fas fa-fw fa-trash"></i>
                                         </button>
                                     </div>
@@ -104,8 +108,13 @@
                             @endforeach
                             <hr>
                             <h5>Total</h5>
-                            <p class="card-text">R$ {{ number_format($total, 2, ',', '.') }}</p>
-                            <button class="btn btn-primary btn-block">Finalizar pedido</button>
+                            <p class="card-text">
+                                R$ {{ number_format($total, 2, ',', '.') }}
+                            </p>
+                            <button class="btn btn-danger btn-block removeAll">Remover tudo</button>
+                            <a href="{{ route('buy.checkout', ['buyer' => $buyer, 'seller' => $seller]) }}" class="btn btn-primary btn-block">
+                                Finalizar pedido
+                            </a>
                         @else
                             <p class="card-text">Nenhum produto adicionado</p>
                         @endif
@@ -127,12 +136,10 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.11.4/i18n/pt_br.json"
             }
         });
-        $(".removeCart").click(function(e) {
+        $(".remove").click(function(e) {
             e.preventDefault();
             let el = $(this);
             let id = el.attr("data-id");
-            let buyer = el.attr("data-buyer");
-            let seller = el.attr("data-seller");
             if (confirm("Tem certeza?")) {
                 $.ajax({
                     url: "{{ route('buy.remove') }}",
@@ -140,14 +147,31 @@
                     data: {
                         _token: "{{ csrf_token() }}",
                         id,
-                        buyer,
-                        seller
+                        buyer: "{{ $buyer->id }}",
+                        seller: "{{ $seller->id }}"
                     },
                     success: function(res) {
                         window.location.reload();
                     }
                 });
             }
-        })
+        });
+        $(".removeAll").click(function(e) {
+            e.preventDefault();
+            if (confirm("Tem certeza?")) {
+                $.ajax({
+                    url: "{{ route('buy.removeAll') }}",
+                    method: "DELETE",
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        buyer: "{{ $buyer->id }}",
+                        seller: "{{ $seller->id }}"
+                    },
+                    success: function(res) {
+                        window.location.reload();
+                    }
+                });
+            }
+        });
     </script>
 @endsection

@@ -34,9 +34,17 @@ Auth::routes();
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::get('buy', [BuyController::class, 'index'])->name('buy');
-    Route::get('buy/{buyer}/from/{seller}', [BuyController::class, 'products'])->name('buy.products');
-    Route::get('buy/add/{product}', [BuyController::class, 'addToCart'])->name('buy.add');
+    Route::get('buy/{buyer}/from/{seller}', [BuyController::class, 'products'])->name('buy.products')->missing(function() {
+        return redirect()->route('buy');
+    });
+    Route::get('buy/add/{product}', [BuyController::class, 'addToCart'])->name('buy.add')->missing(function() {
+        return redirect()->route('buy');
+    });
     Route::delete('buy/remove', [BuyController::class, 'remove'])->name('buy.remove');
+    Route::delete('buy/removeAll', [BuyController::class, 'removeAll'])->name('buy.removeAll');
+    Route::get('buy/{buyer}/from/{seller}/checkout', [BuyController::class, 'checkout'])->name('buy.checkout')->missing(function() {
+        return redirect()->route('buy');
+    });
     Route::get('sell', [SellController::class, 'index'])->name('sell');
     Route::resource('companies', CompanyController::class);
     Route::resource('companies.adresses', CompanyAddressController::class)->only(['store', 'destroy'])->shallow();
