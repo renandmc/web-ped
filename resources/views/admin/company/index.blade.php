@@ -32,10 +32,10 @@
         <div class="row">
             <div class="col-12">
                 @php
-                    $heads = ['Status', 'Nome', 'Razão social', 'CNPJ', 'Opções'];
+                    $heads = ['Status', 'Nome', 'CNPJ', 'Opções'];
                     $config = [
                         'order' => [[0, 'asc'], [1, 'asc']],
-                        'columns' => [null, null, null, null, ['orderable' => false, 'searchable' => false]],
+                        'columns' => [null, null, null, ['orderable' => false, 'searchable' => false]],
                         'lengthMenu' => [[5, 10, 25], [5, 10, 25]],
                     ];
                 @endphp
@@ -48,7 +48,6 @@
                                 </span>
                             </td>
                             <td>{{ $company->name }}</td>
-                            <td>{{ $company->corporate_name }}</td>
                             <td>{{ $company->cnpj }}</td>
                             <td>
                                 <a href="{{ route('companies.products.index', $company) }}" class="btn btn-primary">
@@ -56,6 +55,10 @@
                                     Produtos
                                     &nbsp;
                                     <span class="badge badge-light">{{ count($company->products) }}</span>
+                                </a>
+                                <a href="{{ route('companies.edit', $company) }}" class="btn btn-primary" title="Editar">
+                                    <i class="fas fa-fw fa-pen"></i>
+                                    Editar
                                 </a>
                                 <a href="{{ route('companies.show', $company) }}" class="btn btn-default"
                                     title="Informações">

@@ -29,16 +29,21 @@
                         <img src="{{ $company->image_url }}" alt="Foto {{ $company->name }}" class="img-rounded mw-75">
                     </div>
                     <div class="col">
-                        <p class="card-text lead">
-                            <span class="font-weight-bold">
-                                {{ $company->name }} ({{ $company->corporate_name }})
-                            </span>
+                        <p class="card-text">
                             <span class="badge badge-{{ $company->active ? 'success' : 'danger' }}">
                                 {{ $company->active ? 'Ativa' : 'Inativa' }}
                             </span>
                         </p>
+                        <p class="card-text lead">
+                            <span class="font-weight-bold">
+                                {{ $company->name }}
+                            </span>
+                            <br>
+                            {{ $company->corporate_name }}
+                        </p>
                         <p class="card-text">
-                            CNPJ
+                            <span class="text-bold">CNPJ:</span>
+                            &nbsp;
                             {{ $company->cnpj }}
                         </p>
                         <p class="card-text font-weight-light">
@@ -47,11 +52,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-3">
-                <a href="{{ route('companies.edit', $company) }}" class="btn btn-primary btn-block" title="Editar">
-                    <i class="fas fa-fw fa-pen"></i>
-                    Editar
-                </a>
+            <div class="col-3 my-auto">
                 <x-adminlte-button class="btn-block" theme="danger" icon="fas fa-fw fa-ban" title="Desativar"
                     label="Desativar" data-toggle="modal" data-target="#modalDelCompany" data-id="{{ $company->id }}" />
                 <a href="{{ route('companies.products.index', $company) }}" class="btn btn-primary btn-block">

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Company;
 use App\Http\Controllers\Controller;
+use App\Models\CompanyAddress;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,7 +26,7 @@ class BuyController extends Controller
 
     public function products(Request $request, Company $buyer, Company $seller)
     {
-        if ($buyer->sellersActive()->where('id', $seller->id)->count() === 0) {
+        if ($buyer->sellersActive()->where('id', $seller->id)->count() == 0) {
             return redirect()->route('buy');
         } else {
             $cartName = "cart-$buyer->id-$seller->id";
@@ -79,7 +81,6 @@ class BuyController extends Controller
             }
             return $request->session()->flash('success', 'Produto removido!');
         }
-
     }
 
     public function removeAll(Request $request)
@@ -116,5 +117,35 @@ class BuyController extends Controller
             'items' => $items,
             'total' => $total,
         ]);
+    }
+
+    public function confirm(Request $request, Company $buyer, Company $seller)
+    {
+        $cartName = "cart-$buyer->id-$seller->id";
+        if (count($request->products) > 0) {
+            $order = Order::create([
+                'buyer_id' => $buyer->id,
+                'seller_id' => $seller->id,
+                'address_id' => $request->address,
+                'total' => 0
+            ]);
+            $total = 0;
+            foreach ($request->products as $id => $quantity) {
+                $product = Product::find($id);
+                $subtotal = $product->price * $quantity;
+                $order->items()->create([
+                    'product_id' => $id,
+                    'quantity' => $quantity,
+                    'total_item' => $subtotal
+                ]);
+                $total += $subtotal;
+            }
+            $order->total = $total;
+            $order->save();
+            $request->session()->forget($cartName);
+            return redirect()->route('orders.sent')->with('success', 'Pedido realizado com sucesso!');
+        } else {
+            return redirect()->route('buy');
+        }
     }
 }

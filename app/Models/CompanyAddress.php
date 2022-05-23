@@ -28,8 +28,7 @@ class CompanyAddress extends Model
         'neighborhood',
         'city',
         'state',
-        'notes',
-        'active'
+        'notes'
     ];
 
     public function company()
@@ -40,5 +39,10 @@ class CompanyAddress extends Model
     protected function getCepAttribute($value)
     {
         return substr($value, 0, 5) . '-' . substr($value, 4, 3);
+    }
+
+    public function getAddressAttribute()
+    {
+        return "({$this->cep}) {$this->street}, {$this->number} - {$this->neighborhood} - {$this->city} - {$this->state}";
     }
 }

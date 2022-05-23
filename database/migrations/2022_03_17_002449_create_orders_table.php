@@ -18,12 +18,19 @@ class CreateOrdersTable extends Migration
             $table->foreignId('buyer_id')
                 ->constrained('companies')
                 ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+                ->cascadeOnUpdate()
+                ->name('fk_orders_buyer');
             $table->foreignId('seller_id')
                 ->constrained('companies')
                 ->cascadeOnDelete()
-                ->cascadeOnUpdate();
-            $table->dateTime('datetime');
+                ->cascadeOnUpdate()
+                ->name('fk_orders_seller');
+            $table->foreignId('address_id')
+                ->nullable()
+                ->constrained('company_addresses')
+                ->cascadeOnUpdate()
+                ->nullOnDelete()
+                ->name('fk_orders_address');
             $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('extra', 10, 2)->default(0);
             $table->decimal('total', 10, 2);

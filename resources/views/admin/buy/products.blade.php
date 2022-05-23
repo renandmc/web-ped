@@ -59,7 +59,8 @@
                     </x-adminlte-datatable>
                 </div>
                 <div class="col-12 col-lg-5">
-                    <x-adminlte-card title="Pedido">
+                    <x-adminlte-card>
+                        <h4 class="text-bold">Pedido</h4>
                         <p class="card-text">
                             {{ $buyer->name }}
                             <i class="fas fa-fw fa-angle-right"></i>
@@ -100,21 +101,30 @@
                                         </div>
                                     </div>
                                     <div class="col-auto my-auto">
-                                        <button class="btn btn-sm btn-danger remove" data-id="{{ $id }}">
-                                            <i class="fas fa-fw fa-trash"></i>
+                                        <button class="btn btn-danger remove" data-id="{{ $id }}">
+                                            <i class="fas fa-fw fa-times"></i>
+                                            Remover item
                                         </button>
                                     </div>
                                 </div>
                             @endforeach
                             <hr>
-                            <h5>Total</h5>
-                            <p class="card-text">
-                                R$ {{ number_format($total, 2, ',', '.') }}
-                            </p>
-                            <button class="btn btn-danger btn-block removeAll">Remover tudo</button>
-                            <a href="{{ route('buy.checkout', ['buyer' => $buyer, 'seller' => $seller]) }}" class="btn btn-primary btn-block">
-                                Finalizar pedido
-                            </a>
+                            <div class="row">
+                                <div class="col-6">
+                                    <h5 class="text-bold">Total</h5>
+                                    <p class="card-text">R$ {{ number_format($total, 2, ',', '.') }}</p>
+                                </div>
+                                <div class="col-6">
+                                    <button class="btn btn-danger btn-block removeAll">
+                                        <i class="fas fa-fw fa-times"></i>
+                                        Remover tudo
+                                    </button>
+                                    <a href="{{ route('buy.checkout', ['buyer' => $buyer, 'seller' => $seller]) }}" class="btn btn-primary btn-block">
+                                        <i class="fas fa-fw fa-check"></i>
+                                        Finalizar pedido
+                                    </a>
+                                </div>
+                            </div>
                         @else
                             <p class="card-text">Nenhum produto adicionado</p>
                         @endif

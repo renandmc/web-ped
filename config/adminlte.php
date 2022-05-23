@@ -64,10 +64,10 @@ return [
     |
     */
 
-    'usermenu_enabled' => false,
+    'usermenu_enabled' => true,
     'usermenu_header' => false,
     'usermenu_header_class' => '',
-    'usermenu_image' => false,
+    'usermenu_image' => true,
     'usermenu_desc' => false,
     'usermenu_profile_url' => false,
 
@@ -237,26 +237,24 @@ return [
             'icon' => 'fas fa-fw fa-chart-line',
             'active' => ['admin']
         ],
-        ['header' => 'Comprar/vender'],
         [
             'text' => 'Comprar',
             'route' => 'buy',
             'active' => ['admin/buy*'],
             'icon' => 'fas fa-fw fa-shopping-cart',
         ],
+        ['header' => 'Pedidos'],
         [
-            'text' => 'Vender',
-            //'route' => 'sell',
-            'url' => '#',
-            'active' => ['admin/sell*'],
-            'icon' => 'fas fa-fw fa-store-alt',
+            'text' => 'Enviados',
+            'route' => 'orders.sent',
+            'active' => ['admin/orders/sent*'],
+            'icon' => 'fas fa-fw fa-file-export',
         ],
-        ['header' => 'Empresas'],
         [
-            'text' => 'Minhas empresas',
-            'route' => 'companies.index',
-            'active' => ['admin/companies*'],
-            'icon' => 'fas fa-fw fa-building',
+            'text' => 'Recebidos',
+            'route' => 'orders.received',
+            'active' => ['admin/orders/received*'],
+            'icon' => 'fas fa-fw fa-file-import',
         ],
         ['header' => 'Vínculos'],
         [
@@ -273,7 +271,13 @@ return [
         ],
         ['header' => 'Configurações'],
         [
-            'text' => 'profile',
+            'text' => 'Minhas empresas',
+            'route' => 'companies.index',
+            'active' => ['admin/companies*'],
+            'icon' => 'fas fa-fw fa-building',
+        ],
+        [
+            'text' => 'Perfil',
             'url'  => 'admin/user/profile',
             'active' => ['admin/user*'],
             'icon' => 'fas fa-fw fa-user',
@@ -317,7 +321,7 @@ return [
 
     'plugins' => [
         'InputMask' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -327,7 +331,7 @@ return [
             ]
         ],
         'BootstrapSwitch' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -337,7 +341,7 @@ return [
             ],
         ],
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -357,7 +361,7 @@ return [
             ],
         ],
         'DatatablesPlugins' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -402,7 +406,7 @@ return [
             ],
         ],
         'Select2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
@@ -432,7 +436,7 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',

@@ -76,6 +76,16 @@ class Company extends Model
             ->wherePivot('status', 'Ativo');
     }
 
+    public function ordersSent()
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
+    }
+
+    public function ordersReceived()
+    {
+        return $this->hasMany(Order::class, 'seller_id');
+    }
+
     protected function getCnpjAttribute($value)
     {
         return substr($value, 0, 2) . '.' . substr($value, 2, 3) . '.' .

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BuyController;
 use App\Http\Controllers\Admin\CompanyAddressController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SellController;
@@ -45,7 +46,20 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::get('buy/{buyer}/from/{seller}/checkout', [BuyController::class, 'checkout'])->name('buy.checkout')->missing(function() {
         return redirect()->route('buy');
     });
-    Route::get('sell', [SellController::class, 'index'])->name('sell');
+    Route::post('buy/{buyer}/from/{seller}/checkout', [BuyController::class, 'confirm'])->name('buy.confirm')->missing(function() {
+        return redirect()->route('buy');
+    });
+    //Route::get('sell', [SellController::class, 'index'])->name('sell');
+    Route::prefix('orders')->name('orders')->group(function () {
+        Route::get('sent', [OrderController::class, 'sent'])->name('.sent');
+        Route::get('sent/{order}', [OrderController::class, 'details'])->name('.sent.details')->missing(function() {
+            return redirect()->route('orders.sent');
+        });
+        Route::get('received', [OrderController::class, 'received'])->name('.received');
+        Route::get('received/{order}', [OrderController::class, 'details'])->name('.received.details')->missing(function() {
+            return redirect()->route('orders.received');
+        });
+    });
     Route::resource('companies', CompanyController::class);
     Route::resource('companies.adresses', CompanyAddressController::class)->only(['store', 'destroy'])->shallow();
     Route::resource('companies.products', ProductController::class)->shallow();
