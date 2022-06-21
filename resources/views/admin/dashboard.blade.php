@@ -55,7 +55,7 @@
                     </div>
                     <div class="col-6">
                         <p class="card-text">
-                            Últimos pedidos enviados
+                            <b>Últimos pedidos enviados</b>
                             &nbsp;
                             <a href="{{ route('orders.sent') }}">
                                 Ver mais
@@ -63,34 +63,38 @@
                             </a>
                         </p>
                         <ul class="list-group">
-                            @foreach ($myOrders as $order)
-                                <li class="list-group-item">
-                                    <a href="{{ route('orders.sent.details', $order) }}">
-                                        <strong>#{{ $order->id }}</strong>
-                                        {{ $order->created_at->format('d/m/Y H:m:s') }}
-                                        @php
-                                            $badge = '';
-                                            switch ($order->status) {
-                                                case 'Aprovado':
-                                                    $badge = 'success';
-                                                    break;
-                                                case 'Cancelado':
-                                                    $badge = 'danger';
-                                                    break;
-                                                case 'Pendente':
-                                                    $badge = 'warning';
-                                                    break;
-                                                default:
-                                                    $badge = 'primary';
-                                                    break;
-                                            }
-                                        @endphp
-                                        <span class="float-right badge badge-{{ $badge }}">
-                                            {{ $order->status }}
-                                        </span>
-                                    </a>
-                                </li>
-                            @endforeach
+                            @if (count($myOrders) > 0)
+                                @foreach ($myOrders as $order)
+                                    <li class="list-group-item">
+                                        <a href="{{ route('orders.sent.details', $order) }}">
+                                            <strong>#{{ $order->id }}</strong>
+                                            {{ $order->created_at->format('d/m/Y H:m:s') }}
+                                            @php
+                                                $badge = '';
+                                                switch ($order->status) {
+                                                    case 'Aprovado':
+                                                        $badge = 'success';
+                                                        break;
+                                                    case 'Cancelado':
+                                                        $badge = 'danger';
+                                                        break;
+                                                    case 'Pendente':
+                                                        $badge = 'warning';
+                                                        break;
+                                                    default:
+                                                        $badge = 'primary';
+                                                        break;
+                                                }
+                                            @endphp
+                                            <span class="float-right badge badge-{{ $badge }}">
+                                                {{ $order->status }}
+                                            </span>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            @else
+                                <p class="card-text">Nenhum pedido enviado</p>
+                            @endif
                         </ul>
                     </div>
                 </div>
@@ -123,7 +127,8 @@
             labels: ["Ativas", "Inativas"],
             datasets: [{
                 data: [{{ $chartData['companies']['active'] }},
-                    {{ $chartData['companies']['inactive'] }}],
+                    {{ $chartData['companies']['inactive'] }}
+                ],
                 backgroundColor: ['#007bff', '#dc3545'],
             }]
         };
