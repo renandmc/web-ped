@@ -19,6 +19,9 @@ class DashboardController extends Controller
         $myCompanies = Company::where('owner_id', Auth::id())->get();
         $products = Product::all();
         $orders = Order::all();
+        $myOrders = Order::whereIn('buyer_id', function($query) {
+            $query->select('id')->from(with(new Company())->getTable())->where('owner_id', Auth::id());
+        })->latest()->take(5)->get();
 
         $dataCompanies = [];
         $dataCompanies['total'] = count($companies);
@@ -70,7 +73,8 @@ class DashboardController extends Controller
         $chartData['partners']['sellers'] = $sellers;
         $chartData['partners']['buyers'] = $buyers;
         return view('admin.dashboard', [
-            'chartData' => $chartData
+            'chartData' => $chartData,
+            'myOrders' => $myOrders,
         ]);
     }
 }

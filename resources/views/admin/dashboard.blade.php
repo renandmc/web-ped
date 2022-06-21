@@ -22,12 +22,14 @@
                 url="{{ route('companies.index') }}" url-text="Minhas empresas" theme="primary" />
         </div>
         <div class="col-lg-3">
-            <x-adminlte-small-box title="{{ $chartData['products']['total'] }}" text="Produtos" icon="fas fa-lg fa-box-open"
-                url="{{ route('companies.index') }}" url-text="Minhas empresas" theme="primary" />
+            <x-adminlte-small-box title="{{ $chartData['products']['total'] }}" text="Produtos"
+                icon="fas fa-lg fa-box-open" url="{{ route('companies.index') }}" url-text="Minhas empresas"
+                theme="primary" />
         </div>
         <div class="col-lg-3">
-            <x-adminlte-small-box title="{{ $chartData['orders']['total'] }}" text="Pedidos" icon="fas fa-lg fa-shopping-cart"
-                url="{{ route('orders.sent') }}" url-text="Meus pedidos" theme="primary" />
+            <x-adminlte-small-box title="{{ $chartData['orders']['total'] }}" text="Pedidos"
+                icon="fas fa-lg fa-shopping-cart" url="{{ route('orders.sent') }}" url-text="Meus pedidos"
+                theme="primary" />
         </div>
         <div class="col-lg-3">
             <x-adminlte-small-box title="{{ $chartData['users']['total'] }}" text="Usuários" icon="fas fa-lg fa-users"
@@ -52,8 +54,44 @@
                         <canvas id="ordersChart"></canvas>
                     </div>
                     <div class="col-6">
-                        <p class="card-text">Gráfico pedidos por mês</p>
-                        <canvas id="ordersMonthChart"></canvas>
+                        <p class="card-text">
+                            Últimos pedidos enviados
+                            &nbsp;
+                            <a href="{{ route('orders.sent') }}">
+                                Ver mais
+                                <i class="fas fa-fw fa-arrow-right"></i>
+                            </a>
+                        </p>
+                        <ul class="list-group">
+                            @foreach ($myOrders as $order)
+                                <li class="list-group-item">
+                                    <a href="{{ route('orders.sent.details', $order) }}">
+                                        <strong>#{{ $order->id }}</strong>
+                                        {{ $order->created_at->format('d/m/Y H:m:s') }}
+                                        @php
+                                            $badge = '';
+                                            switch ($order->status) {
+                                                case 'Aprovado':
+                                                    $badge = 'success';
+                                                    break;
+                                                case 'Cancelado':
+                                                    $badge = 'danger';
+                                                    break;
+                                                case 'Pendente':
+                                                    $badge = 'warning';
+                                                    break;
+                                                default:
+                                                    $badge = 'primary';
+                                                    break;
+                                            }
+                                        @endphp
+                                        <span class="float-right badge badge-{{ $badge }}">
+                                            {{ $order->status }}
+                                        </span>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
                     </div>
                 </div>
             </x-adminlte-card>
@@ -84,7 +122,8 @@
         const dataCompanies = {
             labels: ["Ativas", "Inativas"],
             datasets: [{
-                data: [{{ $chartData['companies']['active'] }}, {{ $chartData['companies']['inactive'] }}],
+                data: [{{ $chartData['companies']['active'] }},
+                    {{ $chartData['companies']['inactive'] }}],
                 backgroundColor: ['#007bff', '#dc3545'],
             }]
         };
@@ -98,21 +137,27 @@
         const dataOrders = {
             labels: ["Aprovados", "Pendentes", "Cancelados"],
             datasets: [{
-                data: [{{ $chartData['orders']['approved'] }}, {{ $chartData['orders']['pending'] }}, {{ $chartData['orders']['rejected'] }}],
+                data: [{{ $chartData['orders']['approved'] }}, {{ $chartData['orders']['pending'] }},
+                    {{ $chartData['orders']['rejected'] }}
+                ],
                 backgroundColor: ["#00b300", "#ffd633", "#dc3545"],
             }]
         };
         const dataSellers = {
             labels: ["Aprovados", "Pendentes"],
             datasets: [{
-                data: [{{ $chartData['partners']['sellers']['approved'] }}, {{ $chartData['partners']['sellers']['pending'] }}],
+                data: [{{ $chartData['partners']['sellers']['approved'] }},
+                    {{ $chartData['partners']['sellers']['pending'] }}
+                ],
                 backgroundColor: ["#00b300", "#ffd633"],
             }]
         };
         const dataBuyers = {
             labels: ["Aprovados", "Pendentes"],
             datasets: [{
-                data: [{{ $chartData['partners']['buyers']['approved'] }}, {{ $chartData['partners']['buyers']['pending'] }}],
+                data: [{{ $chartData['partners']['buyers']['approved'] }},
+                    {{ $chartData['partners']['buyers']['pending'] }}
+                ],
                 backgroundColor: ['#00b300', '#ffd633'],
             }]
         };
