@@ -59,4 +59,25 @@ class OrderController extends Controller
             'order' => $order
         ]);
     }
+
+    public function approve(Request $request, Order $order)
+    {
+        $order->status = 'Aprovado';
+        $order->save();
+        return redirect()->back();
+    }
+
+    public function reject(Request $request, Order $order)
+    {
+        $order->status = 'Cancelado';
+        $order->save();
+        return redirect()->back();
+    }
+
+    public function deliver(Request $request, Order $order)
+    {
+        $order->status = 'Entregue';
+        $order->save();
+        return redirect()->back();
+    }
 }

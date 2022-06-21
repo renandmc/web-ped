@@ -20,7 +20,7 @@
         @php
             $heads = ['Status', 'Data/hora', 'Código', 'Comprador', 'Vendedor', 'Total', 'Opções'];
             $config = [
-                'order' => [[0, 'asc'], [1, 'asc']],
+                'order' => [[1, 'desc'], [2, 'desc']],
                 'columns' => [null, null, null, null, null, null, ['orderable' => false, 'searchable' => false]],
                 'lengthMenu' => [[5, 10, 15], [5, 10, 15]],
             ];
@@ -30,7 +30,25 @@
                 @foreach ($company->ordersReceived as $order)
                     <tr>
                         <td>
-                            <span class="badge badge-{{ $order->status == 'Pendente' ? 'warning' : 'success' }}">
+                            @php
+                                $badge = '';
+                                switch ($order->status) {
+                                    case 'Aprovado':
+                                        $badge = 'success';
+                                        break;
+                                    case 'Cancelado':
+                                        $badge = 'danger';
+                                        break;
+                                    case 'Entregue':
+                                        $badge = 'primary';
+                                        break;
+                                    default:
+                                        $badge = 'warning';
+                                        break;
+                                }
+                            @endphp
+                            <span
+                                class="badge badge-{{ $badge }}">
                                 {{ $order->status }}
                             </span>
                         </td>
@@ -49,11 +67,20 @@
                                 Detalhes
                             </a>
                             @if ($order->status == 'Pendente')
-                                <a href="#" class="btn btn-success">
+                                <a href="{{ route('orders.received.approve', $order) }}" class="btn btn-success">
                                     <i class="fas fa-fw fa-check"></i>
                                     Aceitar
                                 </a>
-                                <a href="#" class="btn btn-danger">
+                                <a href="{{ route('orders.received.reject', $order) }}" class="btn btn-danger">
+                                    <i class="fas fa-fw fa-times"></i>
+                                    Cancelar
+                                </a>
+                            @elseif ($order->status == 'Aprovado')
+                                <a href="{{ route('orders.received.deliver', $order) }}" class="btn btn-primary">
+                                    <i class="fas fa-fw fa-truck"></i>
+                                    Entregue
+                                </a>
+                                <a href="{{ route('orders.received.reject', $order) }}" class="btn btn-danger">
                                     <i class="fas fa-fw fa-times"></i>
                                     Cancelar
                                 </a>

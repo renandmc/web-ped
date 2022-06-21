@@ -30,7 +30,24 @@
                 @foreach ($company->ordersSent as $order)
                     <tr>
                         <td>
-                            <span class="badge badge-{{ $order->status == 'Pendente' ? 'warning' : 'success' }}">
+                            @php
+                                $badge = '';
+                                switch ($order->status) {
+                                    case 'Aprovado':
+                                        $badge = 'success';
+                                        break;
+                                    case 'Cancelado':
+                                        $badge = 'danger';
+                                        break;
+                                    case 'Entregue':
+                                        $badge = 'primary';
+                                        break;
+                                    default:
+                                        $badge = 'warning';
+                                        break;
+                                }
+                            @endphp
+                            <span class="badge badge-{{ $badge }}">
                                 {{ $order->status }}
                             </span>
                         </td>
@@ -48,6 +65,12 @@
                                 <i class="fas fa-fw fa-info"></i>
                                 Detalhes
                             </a>
+                            @if ($order->status == 'Pendente')
+                                <a href="{{ route('orders.received.reject', $order) }}" class="btn btn-danger">
+                                    <i class="fas fa-fw fa-times"></i>
+                                    Cancelar
+                                </a>
+                            @endif
                         </td>
                     </tr>
                 @endforeach

@@ -59,6 +59,15 @@ Route::prefix('admin')->middleware('auth')->group(function () {
         Route::get('received/{order}', [OrderController::class, 'details'])->name('.received.details')->missing(function() {
             return redirect()->route('orders.received');
         });
+        Route::get('received/{order}/approve', [OrderController::class, 'approve'])->name('.received.approve')->missing(function() {
+            return redirect()->route('orders.received');
+        });
+        Route::get('received/{order}/reject', [OrderController::class, 'reject'])->name('.received.reject')->missing(function() {
+            return redirect()->route('orders.received');
+        });
+        Route::get('received/{order}/deliver', [OrderController::class, 'deliver'])->name('.received.deliver')->missing(function() {
+            return redirect()->route('orders.received');
+        });
     });
     Route::resource('companies', CompanyController::class);
     Route::resource('companies.adresses', CompanyAddressController::class)->only(['store', 'destroy'])->shallow();
