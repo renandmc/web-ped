@@ -17,7 +17,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $user = User::find(Auth::id(), ['name', 'email', 'created_at']);
+        $user = User::find(Auth::id());
         return view('admin.user.profile', [
             'user' => $user,
         ]);

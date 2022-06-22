@@ -12,7 +12,7 @@ class ProductController extends Controller
 {
     public function index(Company $company)
     {
-        $products = Product::where('company_id', $company->id)->orderBy('active', 'desc')->paginate(5);
+        $products = Product::where('company_id', $company->id)->get();
         return view('admin.product.index', [
             'products' => $products,
             'company' => $company,
@@ -29,7 +29,9 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request, Company $company)
     {
         $company->products()->create($request->validated());
-        return redirect()->route('admin.company.product.index', $company)->with('success', 'Produto criado com sucesso!');
+        return redirect()
+            ->route('companies.products.index', $company)
+            ->with('success', 'Produto criado com sucesso!');
     }
 
     public function show(Product $product)

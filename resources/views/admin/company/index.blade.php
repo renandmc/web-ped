@@ -39,8 +39,8 @@
                         'lengthMenu' => [[5, 10, 25], [5, 10, 25]],
                     ];
                 @endphp
-                <x-adminlte-datatable id="tableCompanies" :heads="$heads" :config="$config" hoverable beautify>
-                    @forelse ($companies as $company)
+                <x-adminlte-datatable id="tableCompanies" :heads="$heads" :config="$config" hoverable beautify with-buttons>
+                    @foreach ($companies as $company)
                         <tr>
                             <td>
                                 <span class="badge badge-{{ $company->active ? 'success' : 'danger' }}">
@@ -67,11 +67,7 @@
                                 </a>
                             </td>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5">Nenhuma empresa cadastrada</td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </x-adminlte-datatable>
             </div>
         </div>

@@ -101,7 +101,9 @@
         @else
             <div class="col-12">
                 <x-adminlte-card>
-                    <p class="card-text">Nenhuma empresa cadastrada</p>
+                    <p class="card-text">
+                        Nenhuma empresa cadastrada, <a href="{{ route('companies.create') }}">cadastrar nova.</a>
+                    </p>
                 </x-adminlte-card>
             </div>
         @endif

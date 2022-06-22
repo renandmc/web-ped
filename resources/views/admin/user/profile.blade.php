@@ -42,11 +42,6 @@
                             &nbsp;
                             Alterar senha
                         </a>
-                        <a href="#" class="btn btn-block btn-danger">
-                            <i class="fas fa-user-slash"></i>
-                            &nbsp;
-                            Excluir conta
-                        </a>
                     </div>
                 </div>
             </div>

@@ -17,72 +17,71 @@
 
 @section('content')
     <x-adminlte-card>
-        @php
-            $heads = ['Status', 'Data/hora', 'Código', 'Comprador', 'Vendedor', 'Total', 'Opções'];
-            $config = [
-                'order' => [[0, 'asc'], [1, 'asc']],
-                'columns' => [null, null, null, null, null, null, ['orderable' => false, 'searchable' => false]],
-                'lengthMenu' => [[5, 10, 15, -1], [5, 10, 15, 'Todos']],
-            ];
-        @endphp
-        <x-adminlte-datatable id="tableOrders" :heads="$heads" :config="$config" beautify with-buttons>
-            @forelse ($companies as $company)
-                @foreach ($company->ordersSent as $order)
-                    <tr>
-                        <td>
-                            @php
-                                $badge = '';
-                                switch ($order->status) {
-                                    case 'Aprovado':
-                                        $badge = 'success';
-                                        break;
-                                    case 'Cancelado':
-                                        $badge = 'danger';
-                                        break;
-                                    case 'Entregue':
-                                        $badge = 'primary';
-                                        break;
-                                    default:
-                                        $badge = 'warning';
-                                        break;
-                                }
-                            @endphp
-                            <span class="badge badge-{{ $badge }}">
-                                {{ $order->status }}
-                            </span>
-                        </td>
-                        <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
-                        <td>Pedido #{{ $order->id }}</td>
-                        <td>
-                            <a href="{{ route('companies.show', $company) }}">
-                                <b>{{ $company->name }}</b>
-                            </a>
-                        </td>
-                        <td><b>{{ $order->seller->name }}</b></td>
-                        <td>R$ {{ number_format($order->total, 2, ',', '.') }}</td>
-                        <td>
-                            <a href="{{ route('orders.sent.details', $order)}}" class="btn btn-default">
-                                <i class="fas fa-fw fa-info"></i>
-                                Detalhes
-                            </a>
-                            @if ($order->status == 'Pendente')
-                                <a href="{{ route('orders.received.reject', $order) }}" class="btn btn-danger">
-                                    <i class="fas fa-fw fa-times"></i>
-                                    Cancelar
+        @if (count($companies) > 0)
+            @php
+                $heads = ['Status', 'Data/hora', 'Código', 'Comprador', 'Vendedor', 'Total', 'Opções'];
+                $config = [
+                    'order' => [[0, 'asc'], [1, 'asc']],
+                    'columns' => [null, null, null, null, null, null, ['orderable' => false, 'searchable' => false]],
+                    'lengthMenu' => [[5, 10, 15, -1], [5, 10, 15, 'Todos']],
+                ];
+            @endphp
+            <x-adminlte-datatable id="tableOrders" :heads="$heads" :config="$config" beautify with-buttons>
+                @foreach ($companies as $company)
+                    @foreach ($company->ordersSent as $order)
+                        <tr>
+                            <td>
+                                @php
+                                    $badge = '';
+                                    switch ($order->status) {
+                                        case 'Aprovado':
+                                            $badge = 'success';
+                                            break;
+                                        case 'Cancelado':
+                                            $badge = 'danger';
+                                            break;
+                                        case 'Entregue':
+                                            $badge = 'primary';
+                                            break;
+                                        default:
+                                            $badge = 'warning';
+                                            break;
+                                    }
+                                @endphp
+                                <span class="badge badge-{{ $badge }}">
+                                    {{ $order->status }}
+                                </span>
+                            </td>
+                            <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
+                            <td>Pedido #{{ $order->id }}</td>
+                            <td>
+                                <a href="{{ route('companies.show', $company) }}">
+                                    <b>{{ $company->name }}</b>
                                 </a>
-                            @endif
-                        </td>
-                    </tr>
+                            </td>
+                            <td><b>{{ $order->seller->name }}</b></td>
+                            <td>R$ {{ number_format($order->total, 2, ',', '.') }}</td>
+                            <td>
+                                <a href="{{ route('orders.sent.details', $order) }}" class="btn btn-default">
+                                    <i class="fas fa-fw fa-info"></i>
+                                    Detalhes
+                                </a>
+                                @if ($order->status == 'Pendente')
+                                    <a href="{{ route('orders.received.reject', $order) }}" class="btn btn-danger">
+                                        <i class="fas fa-fw fa-times"></i>
+                                        Cancelar
+                                    </a>
+                                @endif
+                            </td>
+                        </tr>
+                    @endforeach
                 @endforeach
-            @empty
-                <tr>
-                    <td colspan="8">
-                        Nenhuma empresa cadastrada, <a href="{{ route('companies.create') }}">cadastrar uma
-                            nova</a>
-                    </td>
-                </tr>
-            @endforelse
-        </x-adminlte-datatable>
+            </x-adminlte-datatable>
+        @else
+            <p class="card-text">
+                Nenhuma empresa cadastrada, <a href="{{ route('companies.create') }}">cadastrar nova.</a>
+            </p>
+        @endif
     </x-adminlte-card>
 @endsection
 

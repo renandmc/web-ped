@@ -1,5 +1,8 @@
 @extends('adminlte::page')
 
+@section('plugins.Datatables', true)
+@section('plugins.DatatablesPlugins', true)
+
 @section('content_header')
     <x-adminlte-card>
         <div class="row">
@@ -26,53 +29,48 @@
         <div class="row mb-4">
             <div class="col"></div>
             <div class="col-auto float-md-right">
-                <a href="{{ route('companies.products.create', $company) }}" class="btn btn-primary" title="Novo">
+                <a href="{{ route('companies.products.create', $company) }}" class="btn btn-success" title="Novo">
                     <i class="fas fa-plus"></i>
+                    Novo
                 </a>
             </div>
         </div>
         <div class="row">
-            <div class="col text-center">
-                <div class="row font-weight-bold">
-                    <p class="col my-auto">Status</p>
-                    <p class="col my-auto">Imagem</p>
-                    <p class="col my-auto">Nome</p>
-                    <p class="col my-auto">Tamanho / Un. medida</p>
-                    <p class="col my-auto">Preço</p>
-                    <p class="col my-auto">Ações</p>
-                </div>
-                <hr>
-                @forelse ($products as $product)
-                    <div class="row mb-2">
-                        <p class="col my-auto lead">
-                            <span class="badge badge-{{ $product->active ? 'success' : 'danger' }}">
-                                {{ $product->active ? 'Ativo' : 'Inativo' }}
-                            </span>
-                        </p>
-                        <div class="col my-auto">
-                            <img src="{{ $product->image_url }}" alt="{{ $product->name }}" class="img-fluid rounded">
-                        </div>
-                        <p class="col my-auto font-weight-bold">{{ $product->name }}</p>
-                        <p class="col my-auto">{{ $product->measure_unit }}</p>
-                        <p class="col my-auto">R$ {{ number_format($product->price, 2, ',', '.') }}</p>
-                        <div class="col my-auto">
-                            <a href="{{ route('products.edit', $product) }}" class="btn btn-primary" title="Editar">
-                                <i class="fas fa-fw fa-pen"></i>
-                            </a>
-                            <x-adminlte-button icon="fas fa-fw fa-trash" theme="danger" title="Excluir" data-toggle="modal"
-                                data-target="#modalDelete" data-id="{{ $product->id }}" />
-                        </div>
-                    </div>
-                @empty
-                    <div class="row mb-2">
-                        Nenhum produto cadastrado
-                    </div>
-                @endforelse
-                <div class="row">
-                    <div class="col-auto mx-auto">
-                        {{ $products->links() }}
-                    </div>
-                </div>
+            <div class="col-12">
+                @php
+                    $heads = ['Status', 'Imagem', 'Nome', 'Tamanho/Un. medida', 'Preço', 'Ações'];
+                    $config = [
+                        'order' => [[0, 'asc'], [2, 'asc']],
+                        'columns' => [null, ['orderable' => false, 'searchable' => false], null, null, null, ['orderable' => false, 'searchable' => false]],
+                        'lengthMenu' => [[5, 10, 25], [5, 10, 25]],
+                    ];
+                @endphp
+                <x-adminlte-datatable id="tableProducts" :heads="$heads" :config="$config" hoverable beautify
+                    with-buttons>
+                    @foreach ($products as $product)
+                        <tr>
+                            <td>
+                                <span class="badge badge-{{ $product->active ? 'success' : 'danger' }}">
+                                    {{ $product->active ? 'Ativo' : 'Inativo' }}
+                                </span>
+                            </td>
+                            <td>
+                                <img src="{{ $product->image_url }}" alt="{{ $product->name }}"
+                                    class="img-fluid rounded">
+                            </td>
+                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->measure_unit }}</td>
+                            <td>R$ {{ number_format($product->price, 2, ',', '.') }}</td>
+                            <td>
+                                <a href="{{ route('products.edit', $product) }}" class="btn btn-primary" title="Editar">
+                                    <i class="fas fa-fw fa-pen"></i>
+                                </a>
+                                <x-adminlte-button icon="fas fa-fw fa-trash" theme="danger" title="Excluir"
+                                    data-toggle="modal" data-target="#modalDelete" data-id="{{ $product->id }}" />
+                            </td>
+                        </tr>
+                    @endforeach
+                </x-adminlte-datatable>
             </div>
         </div>
     </x-adminlte-card>
@@ -90,6 +88,13 @@
 @endsection
 
 @section('js')
+    <script>
+        $.extend(true, $.fn.dataTable.defaults, {
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.11.4/i18n/pt_br.json"
+            }
+        });
+    </script>
     <script>
         $('#modalDelete').on('show.bs.modal', function(event) {
             let button = $(event.relatedTarget);
