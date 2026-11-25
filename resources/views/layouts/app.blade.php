@@ -9,7 +9,7 @@
             <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
         @show
         @section('css')
-            <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+            @vite('resources/sass/app.scss')
         @show
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicons/favicon-96x96.png') }}">
@@ -17,7 +17,7 @@
     <body>
         @yield('content')
         @section('js')
-            <script src="{{ asset('js/app.js') }}" defer></script>
+            @vite('resources/js/app.js')
         @show
     </body>
 </html>
