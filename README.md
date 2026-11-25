@@ -65,7 +65,7 @@ DB_PASSWORD=password
 ```
 docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html composer:latest composer install --ignore-platform-reqs --no-scripts
 ```
-> **Importante:** use sempre `--no-scripts`. O `composer.json` define um `post-install-cmd` que executa `php artisan migrate:fresh --seed`, ou seja, um `composer install` normal **apaga todas as tabelas** do banco configurado no `.env` e recria os dados de exemplo (isso é usado no deploy do Heroku). Dentro desse container temporário o banco nem existe, então o comando falharia.
+> O `--no-scripts` evita executar scripts `php artisan` dentro desse container temporário, que não tem o banco nem as extensões do PHP do projeto.
 5. Subir os containers (a primeira vez demora, pois constrói a imagem)
 ```
 WWWUSER=$(id -u) WWWGROUP=$(id -g) docker compose up -d
@@ -116,9 +116,9 @@ git clone https://github.com/renandmc/web-ped.git
 
 cd web-ped
 ```
-2. Instalar as dependências. Use `--no-scripts`: o `composer.json` define um `post-install-cmd` que roda `php artisan migrate:fresh --seed`, o que **apagaria todas as tabelas** do banco configurado no `.env`
+2. Instalar as dependências
 ```
-composer install --no-scripts
+composer install
 
 npm install
 ```
@@ -127,8 +127,6 @@ npm install
 cp .env.example .env
 
 php artisan key:generate
-
-php artisan package:discover
 ```
 4. Criar um banco de dados vazio e ajustar no `.env` as variáveis `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME` e `DB_PASSWORD`
 5. Criar as tabelas e os dados de exemplo
@@ -164,4 +162,8 @@ Com Sail: `docker compose exec laravel.test php artisan test`
 
 ## Deploy
 
-O deploy no Heroku é feito pelos workflows em `.github/workflows` (`master` e `develop`). O `heroku-postbuild` roda `npm run build`, que gera os assets do Vite em `public/build`.
+O deploy no Heroku é feito pelos workflows em `.github/workflows` (`master` e `develop`).
+
+- O `heroku-postbuild` roda `npm run build`, que gera os assets do Vite em `public/build`.
+- A fase `release` do `Procfile` roda `php artisan migrate --force` a cada deploy. Ela só aplica migrations novas e **não apaga dados**.
+- Os dados de exemplo **não** são mais recriados a cada deploy. Para carregá-los uma vez (por exemplo no app de desenvolvimento), rode `heroku run php artisan db:seed -a web-ped-dev`. Para zerar o banco e recriá-lo, use `heroku run php artisan migrate:fresh --seed --force -a web-ped-dev`, sabendo que isso **apaga todos os dados** desse app.

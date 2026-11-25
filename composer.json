@@ -13,26 +13,26 @@
     ],
     "license": "MIT",
     "require": {
-        "php": ">=8.0.2",
-        "fakerphp/faker": "*",
-        "guzzlehttp/guzzle": "*",
+        "php": "^8.2",
+        "fakerphp/faker": "^1.24",
+        "guzzlehttp/guzzle": "^7.17",
         "jeroennoten/laravel-adminlte": "^3.16",
         "laravel/framework": "^12.71",
-        "laravel/sanctum": "*",
-        "laravel/tinker": "*",
-        "laravel/ui": "*",
+        "laravel/sanctum": "^4.5",
+        "laravel/tinker": "^3.2",
+        "laravel/ui": "^4.6",
         "symfony/http-client": "^7.1",
         "symfony/mailgun-mailer": "^7.1",
         "symfony/postmark-mailer": "^7.1"
     },
     "require-dev": {
-        "laravel/sail": "*",
-        "laravel/telescope": "*",
-        "lucascudo/laravel-pt-br-localization": "*",
-        "mockery/mockery": "*",
-        "nunomaduro/collision": "*",
-        "phpunit/phpunit": "*",
-        "spatie/laravel-ignition": "*"
+        "laravel/sail": "^1.71",
+        "laravel/telescope": "^5.29",
+        "lucascudo/laravel-pt-br-localization": "^3.0",
+        "mockery/mockery": "^1.6",
+        "nunomaduro/collision": "^8.9",
+        "phpunit/phpunit": "^12.5",
+        "spatie/laravel-ignition": "^2.12"
     },
     "autoload": {
         "psr-4": {
@@ -59,9 +59,6 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ],
-        "post-install-cmd": [
-            "@php artisan migrate:fresh --seed --force"
         ]
     },
     "extra": {
