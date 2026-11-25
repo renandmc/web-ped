@@ -63,8 +63,9 @@ DB_PASSWORD=password
 ```
 4. Instalar as dependências PHP. Como o `vendor/` ainda não existe, use um container temporário do Composer
 ```
-docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html composer:latest composer install --ignore-platform-reqs
+docker run --rm -u "$(id -u):$(id -g)" -v "$(pwd):/var/www/html" -w /var/www/html composer:latest composer install --ignore-platform-reqs --no-scripts
 ```
+> **Importante:** use sempre `--no-scripts`. O `composer.json` define um `post-install-cmd` que executa `php artisan migrate:fresh --seed`, ou seja, um `composer install` normal **apaga todas as tabelas** do banco configurado no `.env` e recria os dados de exemplo (isso é usado no deploy do Heroku). Dentro desse container temporário o banco nem existe, então o comando falharia.
 5. Subir os containers (a primeira vez demora, pois constrói a imagem)
 ```
 WWWUSER=$(id -u) WWWGROUP=$(id -g) docker compose up -d
@@ -85,6 +86,12 @@ docker compose exec laravel.test npm run build
 
 Para parar os containers: `docker compose down`.
 
+> **Windows sem WSL:** os comandos acima assumem Linux/WSL. No Git Bash o passo 4 falha porque o Git Bash converte o caminho `/var/www/html` em um caminho do Windows. No PowerShell, o passo 4 equivalente é:
+> ```
+> docker run --rm -v "${PWD}:/var/www/html" -w /var/www/html composer:latest composer install --ignore-platform-reqs --no-scripts
+> ```
+> e o passo 5 é `docker compose up -d` (sem `WWWUSER`/`WWWGROUP`). Mesmo assim, o desempenho é bem melhor com o projeto dentro do WSL.
+
 ### Opção 2: Local
 
 Necessário:
@@ -100,9 +107,9 @@ git clone https://github.com/renandmc/web-ped.git
 
 cd web-ped
 ```
-2. Instalar as dependências
+2. Instalar as dependências. Use `--no-scripts`: o `composer.json` define um `post-install-cmd` que roda `php artisan migrate:fresh --seed`, o que **apagaria todas as tabelas** do banco configurado no `.env`
 ```
-composer install
+composer install --no-scripts
 
 npm install
 ```
@@ -111,6 +118,8 @@ npm install
 cp .env.example .env
 
 php artisan key:generate
+
+php artisan package:discover
 ```
 4. Criar um banco de dados vazio e ajustar no `.env` as variáveis `DB_HOST`, `DB_PORT`, `DB_DATABASE`, `DB_USERNAME` e `DB_PASSWORD`
 5. Criar as tabelas e os dados de exemplo
