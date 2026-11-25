@@ -98,11 +98,4 @@ class CompanyTest extends TestCase
 
         $this->assertDatabaseHas('companies', ['id' => $company->id, 'active' => 0]);
     }
-
-    public function test_user_cannot_modify_another_users_company(): void
-    {
-        $this->markTestSkipped(
-            'Known gap: CompanyController does not authorize access; the policies are empty stubs and unregistered.'
-        );
-    }
 }

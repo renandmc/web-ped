@@ -57,10 +57,14 @@ class PartnerController extends Controller
             'buyer' => 'required|integer'
         ]);
 
-        $buyer = Company::find($request->buyer);
-        $buyer->sellers()->attach($request->seller);
+        $buyer = Company::findOrFail($request->buyer);
+        $seller = Company::findOrFail($request->seller);
 
-        $buyer->save();
+        // Only the buyer's owner can request a partnership, and never with a company they own
+        $this->authorize('update', $buyer);
+        abort_if(!$seller->active || (int) $seller->owner_id === (int) Auth::id(), 403);
+
+        $buyer->sellers()->attach($seller->id);
 
         return redirect()->back()->with('success', 'Parceiro adicionado com sucesso!');
     }
@@ -79,10 +83,14 @@ class PartnerController extends Controller
             'status' => 'required|string|in:Ativo,Inativo'
         ]);
 
-        $buyer = Company::find($request->buyer);
-        $buyer->sellers()->attach($request->seller, ['status' => $request->status]);
+        $buyer = Company::findOrFail($request->buyer);
+        $seller = Company::findOrFail($request->seller);
 
-        $buyer->save();
+        // Only the seller's owner can approve or change a partnership
+        $this->authorize('update', $seller);
+
+        // attach() would violate the unique (buyer_id, seller_id) key on an existing partnership
+        $buyer->sellers()->syncWithoutDetaching([$seller->id => ['status' => $request->status]]);
 
         return redirect()->back()->with('success', 'Parceiro atualizado com sucesso!');
     }

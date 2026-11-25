@@ -50,6 +50,7 @@ class CompanyAddressController extends Controller
      */
     public function store(StoreCompanyAddressRequest $request, Company $company)
     {
+        $this->authorize('update', $company);
         $company->adresses()
             ->create($request->validated());
         return redirect()
@@ -107,6 +108,7 @@ class CompanyAddressController extends Controller
      */
     public function destroy(CompanyAddress $adress)
     {
+        $this->authorize('delete', $adress);
         $company = $adress->company;
         $adress->delete();
         return redirect()

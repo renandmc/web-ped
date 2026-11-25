@@ -18,6 +18,7 @@ class BuyController extends Controller
      */
     public function index(Company $company): View
     {
+        $this->authorize('view', $company);
         $companies = Company::where('id', '!=', $company->id)
             ->where('owner_id', '!=', $company->owner->id)
             ->where('active', true)->get();

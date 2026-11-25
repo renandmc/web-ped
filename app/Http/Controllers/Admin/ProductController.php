@@ -18,6 +18,7 @@ class ProductController extends Controller
      */
     public function index(Company $company)
     {
+        $this->authorize('view', $company);
         $products = Product::where('company_id', $company->id)->orderBy('active', 'desc')->paginate(5);
         return view('admin.product.index', [
             'products' => $products,
@@ -33,6 +34,7 @@ class ProductController extends Controller
      */
     public function create(Company $company)
     {
+        $this->authorize('update', $company);
         return view('admin.product.create', [
             'company' => $company,
         ]);
@@ -47,6 +49,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request, Company $company)
     {
+        $this->authorize('update', $company);
         $company->products()->create($request->validated());
         return redirect()->route('companies.products.index', $company)->with('success', 'Produto criado com sucesso!');
     }
@@ -59,6 +62,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $this->authorize('view', $product);
         return view('admin.product.show', [
             'product' => $product,
         ]);
@@ -72,6 +76,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
+        $this->authorize('update', $product);
         return view('admin.product.edit', [
             'product' => $product,
         ]);
@@ -86,6 +91,7 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
+        $this->authorize('update', $product);
         $product->fill($request->validated());
         $product->save();
         return redirect()
@@ -101,6 +107,7 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
+        $this->authorize('delete', $product);
         $company = $product->company;
         $product->delete();
         return redirect()

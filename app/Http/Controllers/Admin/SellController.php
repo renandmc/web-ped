@@ -17,6 +17,7 @@ class SellController extends Controller
      */
     public function index(Company $company)
     {
+        $this->authorize('view', $company);
         $buyers = $company->buyers()->paginate(6);
         return view('admin.sell.index', [
             'company' => $company,

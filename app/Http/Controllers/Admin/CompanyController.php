@@ -57,6 +57,7 @@ class CompanyController extends Controller
      */
     public function show(Company $company)
     {
+        $this->authorize('view', $company);
         return view('admin.company.show', [
             'company' => $company
         ]);
@@ -70,6 +71,7 @@ class CompanyController extends Controller
      */
     public function edit(Company $company)
     {
+        $this->authorize('update', $company);
         return view('admin.company.edit', [
             'company' => $company
         ]);
@@ -84,6 +86,7 @@ class CompanyController extends Controller
      */
     public function update(UpdateCompanyRequest $request, Company $company)
     {
+        $this->authorize('update', $company);
         $validated = $request->validated();
 
         $company->fill($validated);
@@ -101,6 +104,7 @@ class CompanyController extends Controller
      */
     public function destroy(Company $company)
     {
+        $this->authorize('delete', $company);
         $company->active = false;
 
         $company->save();
