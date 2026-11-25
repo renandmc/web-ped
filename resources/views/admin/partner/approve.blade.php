@@ -52,8 +52,16 @@
                                         @forelse ($company->buyers as $buyer)
                                             @php
                                                 $status = $buyer->pivot->status;
-                                                $class = $status == 'Pendente' ? 'warning' : 'success';
-                                                $label = $status == 'Pendente' ? 'Aprovar' : 'Remover';
+                                                $class = match ($status) {
+                                                    'Pendente' => 'warning',
+                                                    'Ativo' => 'success',
+                                                    default => 'secondary',
+                                                };
+                                                [$label, $newStatus] = match ($status) {
+                                                    'Pendente' => ['Aprovar', 'Ativo'],
+                                                    'Ativo' => ['Remover', 'Inativo'],
+                                                    default => ['Reativar', 'Ativo'],
+                                                };
                                             @endphp
                                             <tr>
                                                 <td>
@@ -63,7 +71,14 @@
                                                 </td>
                                                 <td>{{ $buyer->name }}</td>
                                                 <td>
-                                                    <a href="#">{{ $label }}</a>
+                                                    <form action="{{ route('partners.update') }}" method="post">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="seller" value="{{ $company->id }}">
+                                                        <input type="hidden" name="buyer" value="{{ $buyer->id }}">
+                                                        <input type="hidden" name="status" value="{{ $newStatus }}">
+                                                        <button type="submit" class="btn btn-link p-0">{{ $label }}</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         @empty

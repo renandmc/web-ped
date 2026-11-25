@@ -148,6 +148,20 @@ class AuthorizationTest extends TestCase
             ->assertForbidden();
     }
 
+    public function test_approve_page_renders_a_form_that_matches_the_update_route(): void
+    {
+        $buyer = Company::factory()->create(['owner_id' => $this->intruder->id, 'active' => true]);
+        $buyer->sellers()->attach($this->company->id);
+
+        $this->actingAs($this->owner)->get(route('partners.approve'))
+            ->assertOk()
+            ->assertSee(route('partners.update'), false)
+            ->assertSee('name="seller" value="' . $this->company->id . '"', false)
+            ->assertSee('name="buyer" value="' . $buyer->id . '"', false)
+            ->assertSee('name="status" value="Ativo"', false)
+            ->assertSee('Aprovar');
+    }
+
     public function test_only_seller_owner_can_approve_partnership(): void
     {
         $buyer = Company::factory()->create(['owner_id' => $this->intruder->id, 'active' => true]);
