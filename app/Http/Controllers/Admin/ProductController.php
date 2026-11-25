@@ -48,7 +48,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request, Company $company)
     {
         $company->products()->create($request->validated());
-        return redirect()->route('admin.company.product.index', $company)->with('success', 'Produto criado com sucesso!');
+        return redirect()->route('companies.products.index', $company)->with('success', 'Produto criado com sucesso!');
     }
 
     /**
