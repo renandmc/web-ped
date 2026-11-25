@@ -86,11 +86,20 @@ docker compose exec laravel.test npm run build
 
 Para parar os containers: `docker compose down`.
 
-> **Windows sem WSL:** os comandos acima assumem Linux/WSL. No Git Bash o passo 4 falha porque o Git Bash converte o caminho `/var/www/html` em um caminho do Windows. No PowerShell, o passo 4 equivalente é:
-> ```
-> docker run --rm -v "${PWD}:/var/www/html" -w /var/www/html composer:latest composer install --ignore-platform-reqs --no-scripts
-> ```
-> e o passo 5 é `docker compose up -d` (sem `WWWUSER`/`WWWGROUP`). Mesmo assim, o desempenho é bem melhor com o projeto dentro do WSL.
+> **Windows sem WSL (PowerShell ou cmd):** os comandos acima assumem Linux/WSL. Em pastas do Windows (como `C:\`) o disco compartilhado com o container é lento e a extração do Composer pode estourar o tempo limite, por isso os comandos abaixo usam `COMPOSER_PROCESS_TIMEOUT=0`. Os demais passos mudam só no seguinte:
+>
+> - Passo 2 (cmd): `copy .env.example .env` (no PowerShell o `cp` funciona).
+> - Passo 4, PowerShell:
+>   ```
+>   docker run --rm -e COMPOSER_PROCESS_TIMEOUT=0 -v "${PWD}:/var/www/html" -w /var/www/html composer:latest composer install --ignore-platform-reqs --no-scripts
+>   ```
+> - Passo 4, cmd:
+>   ```
+>   docker run --rm -e COMPOSER_PROCESS_TIMEOUT=0 -v "%cd%:/var/www/html" -w /var/www/html composer:latest composer install --ignore-platform-reqs --no-scripts
+>   ```
+> - Passo 5: `docker compose up -d` (sem `WWWUSER`/`WWWGROUP`).
+>
+> **Não use o Git Bash** para o passo 4: ele converte o caminho `/var/www/html` em um caminho do Windows e o comando falha. O desempenho é bem melhor com o projeto dentro do WSL.
 
 ### Opção 2: Local
 
